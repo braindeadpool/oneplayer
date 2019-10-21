@@ -13,3 +13,5 @@ Install typescript
 ```bash
 npm install -g typescript
 ```
+
+Built from boiler plate by https://github.com/alexjoverm/typescript-library-starter
