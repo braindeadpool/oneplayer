@@ -1,17 +1,25 @@
 # oneplayer
 
 ## Setting up
-Install nvm as described [here](https://github.com/nvm-sh/nvm#install--update-script)
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
-```
-Install node
-```bash
-nvm install node
-```
+[Install yarn](https://yarnpkg.com/en/docs/install)
+
 Install typescript
 ```bash
-npm install -g typescript
+yarn global add typescript
+```
+
+### libSAMP
+```bash
+cd libsamp
+```
+
+Install node
+```bash
+yarn add node
+```
+Install
+```bash
+yarn install
 ```
 
 Built from boiler plate by https://github.com/alexjoverm/typescript-library-starter
