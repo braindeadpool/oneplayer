@@ -118,6 +118,7 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "@types/spotify-web-playback-sdk": "^0.1.6"
+    "@types/spotify-web-playback-sdk": "^0.1.6",
+    "react-popout": "^1.0.2"
   }
 }

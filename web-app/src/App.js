@@ -2,8 +2,7 @@ import React from 'react';
 import './App.css';
 import PlayerContainer from './components/PlayerContainer';
 import { CssBaseline } from '@material-ui/core';
-import { SpotifyRedirect } from './spotify/redirect';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 
 function App() {
@@ -23,12 +22,9 @@ function App() {
         </header>
 
         <div className="body">
-          <Switch>
-            <Route path="/spotifyredirect" component={SpotifyRedirect} />
-            <Route path="/" component={PlayerContainer} />
 
-            <Redirect to="/" />
-          </Switch>
+          <PlayerContainer/>
+
         </div>
 
       </div>

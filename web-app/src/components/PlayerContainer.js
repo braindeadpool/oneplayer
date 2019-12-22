@@ -1,8 +1,7 @@
 import React from 'react';
 import { PlayerIcon } from 'react-player-controls';
 import { ProgressBar } from './ProgressBar';
-import { YoutubeIntegration } from './PlayerIntegrations';
-import {SpotifyIntegration} from '../spotify/integration';
+import { YoutubeIntegration, SpotifyIntegration } from './PlayerIntegrations';
 
 export default class PlayerContainer extends React.Component {
     constructor(props) {
