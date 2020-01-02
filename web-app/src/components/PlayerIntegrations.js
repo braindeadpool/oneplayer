@@ -22,13 +22,8 @@ export const spotifyContext = React.createContext({
 export function SpotifyIntegration() {
     const [accessToken, setAccessToken] = useState("");
 
-    const setAccessTokenWithLogging = value => {
-        setAccessToken(value);
-    }
-
-
     return (
-        <spotifyContext.Provider value={{ accessToken:accessToken, setAccessToken:setAccessTokenWithLogging }}>
+        <spotifyContext.Provider value={{ accessToken:accessToken, setAccessToken:setAccessToken }}>
             <Switch>
                 <Route path="/spotifyredirect" component={SpotifyRedirect} />
                 <Route path="/" component={SpotifyWithToken} />
