@@ -1,25 +1,4 @@
-import { PlayableTrack } from './interfaces'
-
-export class PlaybackState {
-  queue: PlayableTrack[]
-  currentTrack: PlayableTrack | undefined
-  currentTimeInTrackMilliseconds: number
-  isPlaying: boolean
-
-  constructor() {
-    this.queue = new Array<PlayableTrack>()
-    this.currentTrack = undefined
-    this.currentTimeInTrackMilliseconds = 0
-    this.isPlaying = false
-  }
-
-  hasCurrentTrackFinished(): boolean {
-    return (
-      this.currentTimeInTrackMilliseconds >=
-      this.currentTrack!.trackListing.durationMilliseconds
-    )
-  }
-}
+import { PlaybackState } from './state'
 
 export class Player {
   playbackState: PlaybackState
@@ -30,16 +9,13 @@ export class Player {
   play(): boolean {
     if (!this.playbackState.isPlaying) {
       if (
-        !this.playbackState.currentTrack ||
+        !this.playbackState.currentTrackIndex ||
         this.playbackState.hasCurrentTrackFinished()
       ) {
-        this.playbackState.currentTrack = this.playbackState.queue.shift()
-        this.playbackState.currentTimeInTrackMilliseconds = 0
-        if (!this.playbackState.currentTrack) {
-          return false
-        }
+        this.playbackState.next()
       }
-      this.playbackState.isPlaying = this.playbackState.currentTrack.play()
+
+      this.playbackState.isPlaying = this.startPlayback()
     }
     return this.playbackState.isPlaying
   }
@@ -48,5 +24,11 @@ export class Player {
     if (!this.playbackState.isPlaying) {
     }
     return this.playbackState.isPlaying
+  }
+
+  // startPlayback() starts the playback loop.
+  startPlayback(): boolean {
+    // TODO: Implement loop start and event monitoring.
+    return false
   }
 }

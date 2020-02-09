@@ -1,24 +1,21 @@
-export interface PlaybackClient {
-  search(query: string): TrackListing[]
-  play(trackListing: TrackListing): boolean
-  pause(): boolean
+export interface MediaProvider {
+  /* init() is always called first before actuall using the provider. All the auth and other setup details should happen here.
+     It returns whether the MediaProvider was successfully initialized. 
+  */
+  init(): boolean
 }
 
-export interface TrackListing {
-  id: string
-  name: string
-  uri: string
-  durationMilliseconds: number
+export class Playlist {
+  constructor(
+    private _orderedTracks: PlayableTrack[] = [],
+    public shouldLoopOver: boolean = false
+  ) {}
+
+  get size(): number {
+    return this._orderedTracks.length
+  }
 }
 
 export class PlayableTrack {
-  trackListing: TrackListing
-  playbackClient: PlaybackClient
-  constructor(trackListing: TrackListing, playbackClient: PlaybackClient) {
-    this.trackListing = trackListing
-    this.playbackClient = playbackClient
-  }
-  play(): boolean {
-    return this.playbackClient.play(this.trackListing)
-  }
+  constructor(mediaProvider: MediaProvider, mediaID: string | undefined) {}
 }
