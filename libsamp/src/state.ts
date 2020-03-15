@@ -56,6 +56,6 @@ export class PlaybackState {
 
   hasCurrentTrackFinished() {
     // TODO: Implement general logic here.
-    false
+    return false
   }
 }
