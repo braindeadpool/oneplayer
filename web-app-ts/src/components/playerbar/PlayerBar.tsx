@@ -6,8 +6,8 @@ import { Box } from '@material-ui/core';
 
 export const PlayerBar: React.FC = () => {
     return (
-        <div>
-            <Box p={"5%"}>
+        <>
+            <Box p={"1%"}>
                 <Grid container justify="center">
                     <Grid item xs={12}>
                         <SliderBar />
@@ -17,6 +17,6 @@ export const PlayerBar: React.FC = () => {
                     </Grid>
                 </Grid>
             </Box>
-        </div>
+        </>
     );
 };

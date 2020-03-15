@@ -2,7 +2,7 @@ import React from 'react';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 
-export const SliderBar = () => {
+export const SliderBar: React.FC = () => {
     const [progressFraction, setProgressFraction] = React.useState<number>(0);
 
     //TODO: Compute the actual time elapsed and time remaning by using current track time from global state

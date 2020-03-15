@@ -4,9 +4,9 @@ import { Helmet } from 'react-helmet';
 import { MainContainer } from './components/MainContainer';
 import './App.css';
 
-export const App = () => {
+export const App: React.FC = () => {
     return (
-        <React.Fragment>
+        <>
             <CssBaseline />
             <Helmet>
                 <meta charSet="utf-8" name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
@@ -15,6 +15,6 @@ export const App = () => {
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300"></link>
             </Helmet>
             <MainContainer />
-        </React.Fragment>
+        </>
     );
 };

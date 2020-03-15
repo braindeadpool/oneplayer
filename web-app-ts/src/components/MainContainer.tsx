@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography'
 export const MainContainer: React.FC = () => {
     return (
         <div>
-            <Typography variant='h1' align='center' gutterBottom>        OnePlayer      </Typography>
+            <Typography variant='h1' align='center' gutterBottom> OnePlayer </Typography>
             <PlayerBar></PlayerBar>
         </div>
     )
