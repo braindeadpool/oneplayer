@@ -4,6 +4,7 @@ export class Player {
   playbackState: PlaybackState
   constructor() {
     this.playbackState = new PlaybackState()
+    // TODO: Setup event handling logic.
   }
 
   play(): boolean {

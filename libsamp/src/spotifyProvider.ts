@@ -25,6 +25,8 @@ export class SpotifyProvider implements MediaProvider {
         this.connectionStatus = true
       }
     })
+
+    // TODO: Setup event handling logic.
     return this.connectionStatus
   }
 }
