@@ -1,6 +1,11 @@
 const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+var ASSET_PATH = path.join(__dirname, 'public');
 
 module.exports = {
     mode: 'production',
@@ -55,15 +60,36 @@ module.exports = {
     externals: {},
 
     plugins: [
+        new CleanWebpackPlugin(),
         //Generate index.html in /dist
         new HtmlWebpackPlugin({
             filename: 'index.html', //Name of file in ./dist/
-            template: './public/index.html', //Name of template in ./src
+            template: path.join(ASSET_PATH, 'index.html'), //Name of template in ./src
             hash: true,
+            scriptLoading: 'defer',
+            manifest: path.join(ASSET_PATH, 'manifest.json'),
         }),
         new MiniCssExtractPlugin({
             filename: '[name].css',
             chunkFilename: '[id].css',
+        }),
+        new FaviconsWebpackPlugin({
+            logo: path.join(ASSET_PATH, 'android-chrome-512x512.png'),
+            favicons: {
+                icons: {
+                    android: true, // Create Android homescreen icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                    appleIcon: true, // Create Apple touch icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                    appleStartup: true, // Create Apple startup images. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                    coast: true, // Create Opera Coast icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                    favicons: true, // Create regular favicons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                    firefox: true, // Create Firefox OS icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                    windows: true, // Create Windows 8 tile icons. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                    yandex: true, // Create Yandex browser icon. `boolean` or `{ offset, background, mask, overlayGlow, overlayShadow }`
+                },
+            },
+        }),
+        new CopyWebpackPlugin([path.join(ASSET_PATH, 'manifest.webmanifest')], {
+            ignore: ['.DS_Store'],
         }),
     ],
 };
