@@ -1,25 +1,42 @@
 # oneplayer
 
 ## Setting up
-[Install yarn](https://yarnpkg.com/en/docs/install)
+
+[Install npm](https://www.npmjs.com/get-npm)
 
 Install typescript
+
 ```bash
-yarn global add typescript
+npm install -g typescript
 ```
+
+Now you can build libSAMP which is the backend pure-typescript library that abstracts out multiple media players into a single API.
 
 ### libSAMP
+
 ```bash
-cd libsamp
+cd libsamp/
+npm install
+npm run build
+cd ../
 ```
 
-Install node
-```bash
-yarn add node
+Optionally, if you want to use this local version of libSAMP for building the web-app in the next section, you will have to symlink it as:
+
 ```
-Install
-```bash
-yarn install
+cd libsamp/
+npm link
+cd ../web-app-ts
+npm link libsamp
+cd ../
 ```
 
-Built from boiler plate by https://github.com/alexjoverm/typescript-library-starter
+### Web App
+
+To build the web-app, simply run the following after libSAMP is built:
+
+```bash
+cd web-app-ts/
+npm install
+npm start
+```
