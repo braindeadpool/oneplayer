@@ -1,6 +1,6 @@
 import { PlaybackState } from '../src/state';
 
-test('initializing playbackstate', () => {
+test('initializing PlaybackState', () => {
     let testPlaybackState = new PlaybackState();
     expect(testPlaybackState.currentTrackIndex).toBe(-1);
     expect(testPlaybackState.setCurrentTrackIndex(0)).toBe(false);

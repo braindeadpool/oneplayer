@@ -10,11 +10,14 @@
     "scripts": {
         "build": "rollup -c",
         "watch": "rollup -cw",
-        "test": "jest --coverage",
+        "test": "jest",
+        "coverage": "jest --coverage",
         "format": "prettier-standard --format",
         "lint": "standard"
     },
     "devDependencies": {
+        "@babel/parser": "^7.9.4",
+        "@babel/types": "^7.9.5",
         "@types/jest": "^25.2.1",
         "jest": "^25.2.7",
         "prettier-standard": "^16.2.1",
@@ -22,6 +25,7 @@
         "rollup-plugin-typescript2": "^0.27.0",
         "standard": "^14.3.3",
         "ts-jest": "^25.3.1",
+        "typedoc": "^0.17.4",
         "typescript": "^3.8.3"
     },
     "directories": {
@@ -39,9 +43,7 @@
     "license": "ISC",
     "description": "Source agnostic media player library.",
     "dependencies": {
-        "@types/jest": "^25.2.1",
         "jest": "^25.2.7",
-        "standard": "^14.3.3",
-        "ts-jest": "^25.3.1"
+        "standard": "^14.3.3"
     }
 }

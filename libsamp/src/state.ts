@@ -1,14 +1,14 @@
 import { Playlist } from './interfaces';
 
 export class PlaybackState {
-    constructor (
+    constructor(
         private _currentPlaylist: Playlist = new Playlist(),
         private _currentTrackIndex: number = -1,
         private _currentTimeInTrackMilliseconds: number = 0.0,
         public isPlaying: boolean = false,
     ) {}
 
-    previous () {
+    previous() {
         if (this._currentPlaylist.size < 1) {
             return false;
         }
@@ -23,7 +23,7 @@ export class PlaybackState {
         return true;
     }
 
-    next () {
+    next() {
         if (this._currentPlaylist.size < 1) {
             return false;
         }
@@ -38,7 +38,7 @@ export class PlaybackState {
         return true;
     }
 
-    setCurrentTrackIndex (index: number) {
+    setCurrentTrackIndex(index: number) {
         if (index < 0 || index >= this._currentPlaylist.size) {
             return false;
         }
@@ -47,15 +47,29 @@ export class PlaybackState {
         return true;
     }
 
-    get currentTrackIndex () {
+    get currentTrackIndex() {
         return this._currentTrackIndex;
     }
 
-    get currentTimeinTrackMilliseconds () {
+    get currentTimeInTrackMilliseconds() {
         return this._currentTimeInTrackMilliseconds;
     }
 
-    hasCurrentTrackFinished () {
+    get currentTrackLengthInMilliseconds() {
+        if (this.currentTrack != null) {
+            return this.currentTrack.trackInfo.durationInMilliseconds;
+        }
+        return 0;
+    }
+
+    get currentTrack() {
+        if (this._currentPlaylist.size > 0) {
+            return this._currentPlaylist.tracks[this._currentTrackIndex];
+        }
+        return null;
+    }
+
+    hasCurrentTrackFinished() {
         // TODO: Implement general logic here.
         return false;
     }
