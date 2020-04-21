@@ -1,4 +1,4 @@
-import { PlaybackState } from 'libsamp';
+import { Player } from 'libsamp';
 
 export type Action = {
     type: 'play' | 'pause' | 'next' | 'previous' | null;
@@ -7,5 +7,5 @@ export type Action = {
 };
 
 export interface IGlobalStateContext {
-    playbackState: PlaybackState;
+    player: Player;
 }

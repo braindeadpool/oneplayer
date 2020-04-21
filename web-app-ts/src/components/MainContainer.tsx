@@ -1,12 +1,15 @@
 import React from 'react';
-import {PlayerBar} from './playerbar/PlayerBar';
-import Typography from '@material-ui/core/Typography'
+import { PlayerBar } from './playerbar/PlayerBar';
+import Typography from '@material-ui/core/Typography';
 
-export const MainContainer: React.FC = () => {
+export const MainContainer: React.FC = (props) => {
     return (
         <div>
-            <Typography variant='h1' align='center' gutterBottom> OnePlayer </Typography>
+            <Typography variant="h1" align="center" gutterBottom>
+                {' '}
+                OnePlayer{' '}
+            </Typography>
             <PlayerBar></PlayerBar>
         </div>
-    )
-}
+    );
+};

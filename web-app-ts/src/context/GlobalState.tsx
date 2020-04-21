@@ -3,10 +3,10 @@ import React, { createContext, useReducer, Dispatch } from 'react';
 import { IGlobalStateContext, Action } from './interfaces';
 import { GlobalReducer } from './GlobalReducer';
 
-import { PlaybackState } from 'libsamp';
+import { PlaybackState, Player } from 'libsamp';
 
 const initialContextState: IGlobalStateContext = {
-    playbackState: new PlaybackState(),
+    player: new Player(),
 };
 
 const initialDispatchContext: Dispatch<Action> = () => {};
@@ -16,13 +16,17 @@ export const GlobalStateContext: React.Context<IGlobalStateContext> = createCont
 // Create the global dispatch context.
 export const GlobalDispatchContext: React.Context<Dispatch<Action>> = createContext(initialDispatchContext);
 
+type GlobalContextProviderProps = {
+    children?: any;
+};
+
 // Create a provider component for the global state context.
-export const GlobalContextProvider = (children: any) => {
+export const GlobalContextProvider = (props: GlobalContextProviderProps) => {
     const [state, dispatch] = useReducer(GlobalReducer, initialContextState);
 
     return (
         <GlobalStateContext.Provider value={state}>
-            <GlobalDispatchContext.Provider value={dispatch}>{children}</GlobalDispatchContext.Provider>
+            <GlobalDispatchContext.Provider value={dispatch}>{props.children}</GlobalDispatchContext.Provider>
         </GlobalStateContext.Provider>
     );
 };

@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet';
 import { MainContainer } from './components/MainContainer';
 import './App.css';
 
+import { GlobalContextProvider } from './context/GlobalState';
+
 export const App: React.FC = () => {
     return (
         <>
@@ -14,7 +16,10 @@ export const App: React.FC = () => {
                 <link rel="canonical" href="http://localhost:3000" />
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300"></link>
             </Helmet>
-            <MainContainer />
+
+            <GlobalContextProvider>
+                <MainContainer />
+            </GlobalContextProvider>
         </>
     );
 };

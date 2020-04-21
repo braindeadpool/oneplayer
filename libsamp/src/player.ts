@@ -1,32 +1,42 @@
 import { PlaybackState } from './state';
 
+/**
+ * A source agnostic media player object. It initializes with a playback state and defines the API to manipulate it.
+ *
+ * @export
+ * @class Player
+ */
 export class Player {
-    playbackState: PlaybackState;
-    constructor () {
-        this.playbackState = new PlaybackState();
+    _playbackState: PlaybackState;
+    constructor() {
+        this._playbackState = new PlaybackState();
         // TODO: Setup event handling logic.
     }
 
-    play (): boolean {
-        if (!this.playbackState.isPlaying) {
-            if (!this.playbackState.currentTrackIndex || this.playbackState.hasCurrentTrackFinished()) {
-                this.playbackState.next();
+    play(): boolean {
+        if (!this._playbackState.isPlaying) {
+            if (!this._playbackState.currentTrackIndex || this._playbackState.hasCurrentTrackFinished()) {
+                this._playbackState.next();
             }
 
-            this.playbackState.isPlaying = this.startPlayback();
+            this._playbackState.isPlaying = this.startPlayback();
         }
-        return this.playbackState.isPlaying;
+        return this._playbackState.isPlaying;
     }
 
-    pause (): boolean {
-        if (!this.playbackState.isPlaying) {
+    pause(): boolean {
+        if (!this._playbackState.isPlaying) {
         }
-        return this.playbackState.isPlaying;
+        return this._playbackState.isPlaying;
     }
 
     // startPlayback() starts the playback loop.
-    startPlayback (): boolean {
+    startPlayback(): boolean {
         // TODO: Implement loop start and event monitoring.
         return false;
+    }
+
+    get playbackState() {
+        return this._playbackState;
     }
 }
