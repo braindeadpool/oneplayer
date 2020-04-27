@@ -1,15 +1,15 @@
-import { PlayableTrack, MediaProvider } from './interfaces';
+import { PlayableTrack, IMediaProvider } from './interfaces';
 
 const SPOTIFY_DEFAULT_VOLUME = 0.5;
 
-export class SpotifyProvider implements MediaProvider {
+export class SpotifyProvider implements IMediaProvider {
     player: any;
     connectionStatus: boolean;
 
-    constructor (accessToken: string) {
+    constructor(accessToken: string) {
         this.player = new Spotify.Player({
             name: 'onePlayer.libSAMP.Spotify',
-            getOAuthToken: callback => {
+            getOAuthToken: (callback) => {
                 callback(accessToken);
             },
             volume: SPOTIFY_DEFAULT_VOLUME,
@@ -17,7 +17,7 @@ export class SpotifyProvider implements MediaProvider {
         this.connectionStatus = false;
     }
 
-    init () {
+    init() {
         // we connect the player to web api.
         this.player.connect().then((success: boolean) => {
             if (success) {

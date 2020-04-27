@@ -1,5 +1,52 @@
 import * as interfaces from '../src/interfaces';
 
+/**
+ * getDummyMediaProvider returns a dummy media provider interface implementation.
+ *
+ */
+function getDummyMediaProvider() {
+    let dummyMediaProviderState = {
+        playlist: Array<interfaces.ITrackInfo>(),
+        currentTrackIndex: -1,
+        currentTrackTimeMilliseconds: -1,
+    };
+    return {
+        init: () => {
+            return Promise.resolve(false);
+        },
+        getCurrentState: () => {
+            return Promise.resolve(dummyMediaProviderState);
+        },
+        play: () => {
+            return Promise.resolve(false);
+        },
+        pause: () => {
+            return Promise.resolve(false);
+        },
+        togglePlayPause: () => {
+            return Promise.resolve(false);
+        },
+        seek: (_: number) => {
+            return Promise.resolve(0);
+        },
+        setVolume: (_: number) => {
+            return Promise.resolve(0);
+        },
+        getVolume: () => {
+            return Promise.resolve(0);
+        },
+        next: () => {
+            return Promise.resolve(dummyMediaProviderState);
+        },
+        previous: () => {
+            return Promise.resolve(dummyMediaProviderState);
+        },
+        goToIndex: (_: number) => {
+            return Promise.resolve(dummyMediaProviderState);
+        },
+    };
+}
+
 test('initializing Playlist', () => {
     let newPlaylist = new interfaces.Playlist();
     expect(newPlaylist.size).toBe(0);
@@ -7,17 +54,16 @@ test('initializing Playlist', () => {
 });
 
 test('initializing PlayableTrack', () => {
+    const dummyMediaProvider = getDummyMediaProvider();
     let newPlayableTrack = new interfaces.PlayableTrack(
         {
             durationInMilliseconds: 100,
         },
-        {
-            init: () => {
-                return false;
-            },
-        },
+        dummyMediaProvider,
     );
     expect(newPlayableTrack.mediaID).toBe(undefined);
     expect(newPlayableTrack.trackInfo.durationInMilliseconds).toBe(100);
-    expect(newPlayableTrack.mediaProvider.init()).toBe(false);
+    newPlayableTrack.IMediaProvider.init().then((data) => {
+        expect(data).toBe(false);
+    });
 });

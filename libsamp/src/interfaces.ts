@@ -1,80 +1,144 @@
-import { PlaybackState } from './state';
+/**
+ * ITrackInfo describes the playback details and metadata of a particular track.
+ *
+ * @export
+ * @interface ITrackInfo
+ */
+export interface ITrackInfo {
+    durationInMilliseconds: number;
+}
 
 /**
- * MediaProviderState exposes the relevant state of a single media provider. This is used for sending control signals back to the specific players.
+ * IIMediaProviderState exposes the relevant state of a single media provider. This is used for sending control signals back to the specific players.
  *
- * @interface MediaProviderState
+ * @interface IIMediaProviderState
  */
-interface MediaProviderState {
+interface IIMediaProviderState {
+    /**
+     * An ordered array of track info objects.
+     *
+     * @type {Array<ITrackInfo>}
+     * @memberof IIMediaProviderState
+     */
+    playlist: Array<ITrackInfo>;
+
+    /**
+     *
+     *
+     * @type {number}
+     * @memberof IIMediaProviderState
+     */
     currentTrackIndex: number;
+
+    /**
+     *
+     *
+     * @type {number}
+     * @memberof IIMediaProviderState
+     */
     currentTrackTimeMilliseconds: number;
 }
 
 /**
- * MediaProvider is an interface implemented by an SDK or a wrapper around an SDK of every media player supported by libSAMP.
- * MediaProvider lets libSAMP (and by extension its users) manipulate multiple media sources together as a single state
+ * IMediaProvider is an interface implemented by an SDK or a wrapper around an SDK of every media player supported by libSAMP.
+ * IMediaProvider lets libSAMP (and by extension its users) manipulate multiple media sources together as a single state
  * without worrying about the specific internal implementation details.
  *
  * @export
- * @interface MediaProvider
+ * @interface IMediaProvider
  */
-export interface MediaProvider {
+export interface IMediaProvider {
     /**
      * init() is always called first before actuall using the provider. All the auth and other setup details should happen here.
-     * It returns a promise boolean indicating whether the MediaProvider was successfully initialized.
+     * It returns a promise boolean indicating whether the IMediaProvider was successfully initialized.
      *
      * @returns {Promise<boolean>}
-     * @memberof MediaProvider
+     * @memberof IMediaProvider
      */
     init(): Promise<boolean>;
 
-    getCurrentState(): Promise<MediaProviderState>;
+    /**
+     * getCurrentState() fetches the current internal state of the player.
+     *
+     * @returns {Promise<IIMediaProviderState>}
+     * @memberof IMediaProvider
+     */
+    getCurrentState(): Promise<IIMediaProviderState>;
 
     /**
-     * play() starts the playback from the current track time and returns a promise indicating whether it succeeded in playing.
+     * play() starts the playback from the current track time.
      *
-     * @returns {Promise<boolean>}
-     * @memberof MediaProvider
+     * @returns {Promise<boolean>} indicates whether the play succeeded.
+     * @memberof IMediaProvider
      */
     play(): Promise<boolean>;
 
     /**
-     * pause() pauses the playback at the current track time and returns a promise indicating whether it succeeded in pausing.
+     * pause() pauses the playback at the current track time.
      *
-     * @returns {Promise<boolean>}
-     * @memberof MediaProvider
+     * @returns {Promise<boolean>} indicates whether the pause succeeded.
+     * @memberof IMediaProvider
      */
     pause(): Promise<boolean>;
 
     /**
-     * togglePlayPause() plays/pauses the playback at the current track time and returns a promise indicating whether it succeeded in toggling.
+     * togglePlayPause() plays/pauses the playback at the current track time.
      *
-     * @returns {Promise<boolean>}
-     * @memberof MediaProvider
+     * @returns {Promise<boolean>} indicates whether the toggle succeeded.
+     * @memberof IMediaProvider
      */
     togglePlayPause(): Promise<boolean>;
 
-    seek(): Promise<number>;
+    /**
+     * seek() seeks the current track to the specified time.
+     *
+     * @param {number} targetTimeInMilliseconds
+     * @returns {Promise<number>} the new time position in the current track.
+     * @memberof IMediaProvider
+     */
+    seek(targetTimeInMilliseconds: number): Promise<number>;
 
-    setVolume(): Promise<number>;
+    /**
+     * setVolume() sets the volume betwen 0 and 1.
+     *
+     * @param {number} targetVolume
+     * @returns {Promise<number>}
+     * @memberof IMediaProvider
+     */
+    setVolume(targetVolume: number): Promise<number>;
 
+    /**
+     * getVolume() gets the current volume as a number betwen 0 and 1.
+     *
+     * @returns {Promise<number>} the current volume.
+     * @memberof IMediaProvider
+     */
     getVolume(): Promise<number>;
 
-    next(): Promise<boolean>;
+    /**
+     * next() starts playing the next track.
+     *
+     * @returns {Promise<IIMediaProviderState>} indicates the new player state.
+     * @memberof IMediaProvider
+     */
+    next(): Promise<IIMediaProviderState>;
 
-    previous(): Promise<boolean>;
+    /**
+     * previous() starts playing the previous track.
+     *
+     * @returns {Promise<IIMediaProviderState>} indicates the new player state.
+     * @memberof IMediaProvider
+     */
+    previous(): Promise<IIMediaProviderState>;
 
-    goToIndex(index: number): Promise<boolean>;
-}
-
-/**
- * TrackInfo describes the playback details and metadata of a particular track.
- *
- * @export
- * @interface TrackInfo
- */
-export interface TrackInfo {
-    durationInMilliseconds: number;
+    /**
+     * goToIndex() sets the current track to the position indicated.
+     *
+     * @param {number} index
+     * @returns {Promise<IIMediaProviderState>} the new player state.
+     * @memberof IMediaProvider
+     */
+    goToIndex(index: number): Promise<IIMediaProviderState>;
 }
 
 /**
@@ -104,23 +168,23 @@ export class Playlist {
 export class PlayableTrack {
     /**
      * Creates an instance of PlayableTrack.
-     * @param {TrackInfo} _trackInfo
-     * @param {MediaProvider} _mediaProvider
+     * @param {ITrackInfo} _trackInfo
+     * @param {IMediaProvider} _IMediaProvider
      * @param {(string | undefined)} [_mediaID=undefined]
      * @memberof PlayableTrack
      */
     constructor(
-        private _trackInfo: TrackInfo,
-        private _mediaProvider: MediaProvider,
+        private _trackInfo: ITrackInfo,
+        private _IMediaProvider: IMediaProvider,
         private _mediaID: string | undefined = undefined,
     ) {}
 
-    get trackInfo(): TrackInfo {
+    get trackInfo(): ITrackInfo {
         return this._trackInfo;
     }
 
-    get mediaProvider(): MediaProvider {
-        return this._mediaProvider;
+    get IMediaProvider(): IMediaProvider {
+        return this._IMediaProvider;
     }
 
     get mediaID(): string | undefined {
