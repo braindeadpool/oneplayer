@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+
+.prettierrc.js
+.pnp.js
+.code-workspace
+.eslintrc.js
+.vscode/
