@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { HashRouter, Switch, Route, Link } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Helmet } from 'react-helmet';
 import { MainContainer } from './components/MainContainer';
@@ -13,7 +13,7 @@ import { GlobalContextProvider } from './context/GlobalState';
 
 export const App: React.FC = () => {
     return (
-        <Router>
+        <HashRouter>
             <CssBaseline />
             <Helmet>
                 <meta charSet="utf-8" name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
@@ -44,6 +44,6 @@ export const App: React.FC = () => {
                     </GlobalContextProvider>
                 </Route>
             </Switch>
-        </Router>
+        </HashRouter>
     );
 };
