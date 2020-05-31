@@ -157,6 +157,16 @@ export class Playlist {
     get tracks(): PlayableTrack[] {
         return this._orderedTracks;
     }
+
+    /**
+     * addTrack() adds a new {@link PlayableTrack} instance to the end of the playlist.
+     *
+     * @param {PlayableTrack} track
+     * @memberof Playlist
+     */
+    addTrack(track: PlayableTrack) {
+        this._orderedTracks.push(track);
+    }
 }
 
 /**

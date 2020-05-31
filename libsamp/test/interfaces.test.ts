@@ -47,10 +47,24 @@ function getDummyMediaProvider() {
     };
 }
 
+function getDummyPlayableTrack() {
+    const dummyMediaProvider = getDummyMediaProvider();
+    return new interfaces.PlayableTrack(
+        {
+            durationInMilliseconds: 100,
+        },
+        dummyMediaProvider,
+    );
+}
+
 test('initializing Playlist', () => {
     let newPlaylist = new interfaces.Playlist();
     expect(newPlaylist.size).toBe(0);
     expect(newPlaylist.shouldLoopOver).toBe(false);
+    const dummyPlayableTrack = getDummyPlayableTrack();
+    newPlaylist.addTrack(dummyPlayableTrack);
+    expect(newPlaylist.size).toBe(1);
+    expect(newPlaylist.tracks[0]).toBe(dummyPlayableTrack);
 });
 
 test('initializing PlayableTrack', () => {

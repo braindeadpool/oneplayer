@@ -17,20 +17,12 @@ export const PlayPauseButton: React.FC = () => {
 
     return (
         <>
-            <IconButton>
-                {globalState.player.playbackState.isPlaying ? (
-                    <PauseCircleFilled
-                        onClick={() => {
-                            togglePlaying();
-                        }}
-                    />
-                ) : (
-                    <PlayCircleFilled
-                        onClick={() => {
-                            togglePlaying();
-                        }}
-                    />
-                )}
+            <IconButton
+                onClick={() => {
+                    togglePlaying();
+                }}
+            >
+                {globalState.player.playbackState.isPlaying ? <PauseCircleFilled /> : <PlayCircleFilled />}
             </IconButton>
         </>
     );

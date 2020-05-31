@@ -1,4 +1,5 @@
 import { PlaybackState } from './state';
+import { PlayableTrack } from './interfaces';
 
 /**
  * A source agnostic media player object. It initializes with a playback state and defines the API to manipulate it.
@@ -27,16 +28,26 @@ export class Player {
     pause(): boolean {
         if (!this._playbackState.isPlaying) {
         }
+        this._playbackState.currentTrack?.IMediaProvider.pause().then(() => {
+            this._playbackState.isPlaying = false;
+        });
         return this._playbackState.isPlaying;
     }
 
     // startPlayback() starts the playback loop.
     startPlayback(): boolean {
         // TODO: Implement loop start and event monitoring.
-        return false;
+        this._playbackState.currentTrack?.IMediaProvider.play().then(() => {
+            this._playbackState.isPlaying = true;
+        });
+        return this._playbackState.isPlaying;
     }
 
     get playbackState() {
         return this._playbackState;
+    }
+
+    addPlayableTrack(playableTrack: PlayableTrack) {
+        this._playbackState.currentPlaylist.addTrack(playableTrack);
     }
 }

@@ -1,4 +1,5 @@
-import { PlayableTrack, IMediaProvider } from './interfaces';
+import { IMediaProvider } from '../interfaces';
+import { Spotify } from 'spotify';
 
 const SPOTIFY_DEFAULT_VOLUME = 0.5;
 
