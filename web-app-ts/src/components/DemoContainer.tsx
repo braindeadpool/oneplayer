@@ -1,11 +1,12 @@
 import React, { useEffect, useContext } from 'react';
 import { PlayerBar } from './playerbar/PlayerBar';
 import Typography from '@material-ui/core/Typography';
-import { GlobalStateContext } from '../context/GlobalState';
+import { GlobalStateContext, GlobalDispatchContext } from '../context/GlobalState';
 import { PlyrProvider } from 'libsamp';
 
 export const DemoContainer: React.FC = (props) => {
     const globalState = useContext(GlobalStateContext);
+    const globalDispatch = useContext(GlobalDispatchContext);
 
     // Initialize the demo video as the current playing track
     const plyrProvider = new PlyrProvider('#demoPlayer');
@@ -19,8 +20,9 @@ export const DemoContainer: React.FC = (props) => {
             },
             'xuCn8ux2gbs',
         );
-        globalState.player.addPlayableTrack(demoTrack);
-        globalState.player.play();
+        // Let's dispatch to add the new track and start playback.
+        globalDispatch({ type: 'addTrack', payload: demoTrack });
+        globalDispatch({ type: 'play' });
     });
 
     return (

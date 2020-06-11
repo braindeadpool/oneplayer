@@ -10,6 +10,18 @@ export const GlobalReducer: Reducer<IGlobalStateContext, Action> = (state, actio
         case 'next':
             state.player.playbackState.next();
             break;
+        case 'addTrack':
+            console.log('addTrack dispatch');
+            state.player.addPlayableTrack(action.payload);
+            break;
+        case 'play':
+            console.log('play dispatch');
+            state.player.play();
+            break;
+        case 'pause':
+            console.log('pause dispatch');
+            state.player.pause();
+            break;
         default:
             break;
     }
