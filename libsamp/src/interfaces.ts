@@ -164,8 +164,9 @@ export class Playlist {
      * @param {PlayableTrack} track
      * @memberof Playlist
      */
-    addTrack(track: PlayableTrack) {
+    addTrack(track: PlayableTrack): boolean {
         this._orderedTracks.push(track);
+        return true;
     }
 }
 
@@ -193,7 +194,7 @@ export class PlayableTrack {
         return this._trackInfo;
     }
 
-    get IMediaProvider(): IMediaProvider {
+    get mediaProvider(): IMediaProvider {
         return this._IMediaProvider;
     }
 

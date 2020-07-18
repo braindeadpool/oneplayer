@@ -47,6 +47,7 @@
     "description": "Source agnostic media player library.",
     "dependencies": {
         "jest": "^25.2.7",
-        "standard": "^14.3.3"
+        "standard": "^14.3.3",
+        "xstate": "^4.11.0"
     }
 }

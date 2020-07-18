@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { SliderBar } from './SliderBar';
 import { PlayPauseButton } from './PlayPauseButton';
@@ -8,7 +8,8 @@ import { GlobalStateContext } from '../../context/GlobalState';
 
 export const PlayerBar: React.FC = () => {
     const globalState = useContext(GlobalStateContext);
-    const currentTrackName = globalState.player.playbackState.currentTrack?.mediaID;
+    const [currentTrackName, setCurrentTrackName] = useState(globalState.player.playbackState.currentTrack?.mediaID);
+
     return (
         <>
             <Box p={'1%'}>
