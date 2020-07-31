@@ -6,11 +6,15 @@
     "dependencies": {
         "@material-ui/core": "^4.9.9",
         "@material-ui/icons": "^4.9.1",
+        "@xstate/react": "^0.8.1",
         "libsamp": "^0.0.0",
         "material-ui": "^0.20.2",
+        "overmind": "^24.1.1",
+        "overmind-react": "^25.1.1",
         "react-router-dom": "^5.2.0",
         "typescript": "^3.8.3",
-        "webpack": "^4.42.1"
+        "webpack": "^4.42.1",
+        "xstate": "^4.11.0"
     },
     "devDependencies": {
         "@testing-library/dom": "^7.1.3",

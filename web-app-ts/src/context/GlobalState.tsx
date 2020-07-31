@@ -1,20 +1,11 @@
-import React, { createContext, useReducer, Dispatch } from 'react';
+import React, { createContext } from 'react';
 
-import { IGlobalStateContext, Action } from './interfaces';
-import { GlobalReducer } from './GlobalReducer';
+import { createPlayerStateMachine } from 'libsamp';
 
-import { PlaybackState, Player } from 'libsamp';
-
-const initialContextState: IGlobalStateContext = {
-    player: new Player(),
-};
-
-const initialDispatchContext: Dispatch<Action> = () => {};
+import { useMachine } from '@xstate/react';
 
 // Create the global state context.
-export const GlobalStateContext: React.Context<IGlobalStateContext> = createContext(initialContextState);
-// Create the global dispatch context.
-export const GlobalDispatchContext: React.Context<Dispatch<Action>> = createContext(initialDispatchContext);
+export const GlobalStateContext = createContext(null as any);
 
 type GlobalContextProviderProps = {
     children?: any;
@@ -22,11 +13,7 @@ type GlobalContextProviderProps = {
 
 // Create a provider component for the global state context.
 export const GlobalContextProvider = (props: GlobalContextProviderProps) => {
-    const [state, dispatch] = useReducer(GlobalReducer, initialContextState);
+    const machineInstance = useMachine(createPlayerStateMachine('default_player'));
 
-    return (
-        <GlobalStateContext.Provider value={state}>
-            <GlobalDispatchContext.Provider value={dispatch}>{props.children}</GlobalDispatchContext.Provider>
-        </GlobalStateContext.Provider>
-    );
+    return <GlobalStateContext.Provider value={machineInstance}>{props.children}</GlobalStateContext.Provider>;
 };

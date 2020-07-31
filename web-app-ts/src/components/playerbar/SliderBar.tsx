@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useMachine } from '@xstate/react';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -6,10 +7,10 @@ import { GlobalStateContext } from '../../context/GlobalState';
 
 export const SliderBar: React.FC = () => {
     const globalState = useContext(GlobalStateContext);
-    // const globalDispatch = useContext(GlobalDispatchContext);
+    const [current] = useMachine(globalState);
 
-    const currentTrackTimeInSeconds = globalState.player.playbackState.currentTimeInTrackMilliseconds * 1000;
-    const currentTrackDurationInSeconds = globalState.player.playbackState.currentTrackLengthInMilliseconds * 1000;
+    const currentTrackTimeInSeconds = current.context.currentTimeInTrackMilliseconds * 1000;
+    const currentTrackDurationInSeconds = current.context.currentTrackLengthInMilliseconds * 1000;
 
     return (
         <>

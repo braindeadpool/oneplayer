@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
+import { useMachine } from '@xstate/react';
 import Grid from '@material-ui/core/Grid';
 import { SliderBar } from './SliderBar';
 import { PlayPauseButton } from './PlayPauseButton';
@@ -8,7 +9,7 @@ import { GlobalStateContext } from '../../context/GlobalState';
 
 export const PlayerBar: React.FC = () => {
     const globalState = useContext(GlobalStateContext);
-    const [currentTrackName, setCurrentTrackName] = useState(globalState.player.playbackState.currentTrack?.mediaID);
+    const [current] = useMachine(globalState);
 
     return (
         <>
@@ -16,7 +17,7 @@ export const PlayerBar: React.FC = () => {
                 <Grid container justify="center">
                     <Grid container justify="center" spacing={4}>
                         <Grid item xs={12}>
-                            <NowPlaying currentTrackName={currentTrackName} />
+                            <NowPlaying currentTrackName={current.context.currentTrackName} />
                         </Grid>
                         <Grid item xs={12}>
                             <SliderBar />

@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { GlobalStateContext } from '../../context/GlobalState';
+import React from 'react';
 import { Typography } from '@material-ui/core';
 
 export const NowPlaying: React.FC<{ currentTrackName: string | undefined }> = ({ currentTrackName }) => {

@@ -47,6 +47,8 @@
     "description": "Source agnostic media player library.",
     "dependencies": {
         "jest": "^25.2.7",
+        "overmind": "^24.1.1",
+        "overmind-statechart": "^1.1.1",
         "standard": "^14.3.3",
         "xstate": "^4.11.0"
     }

@@ -1,4 +1,4 @@
-import { PlaybackState } from './state';
+import { createPlayerStateMachine } from './state';
 import { PlayableTrack } from './interfaces';
 
 /**
@@ -8,9 +8,10 @@ import { PlayableTrack } from './interfaces';
  * @class Player
  */
 export class Player {
-    _playbackState: PlaybackState;
-    constructor() {
-        this._playbackState = new PlaybackState();
+    // TODO: Figure out proper typing here for _playbackState.
+    _playbackState: any;
+    constructor(playerID: string) {
+        this._playbackState = createPlayerStateMachine(playerID);
         // TODO: Setup event handling logic.
     }
 
