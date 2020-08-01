@@ -1,5 +1,6 @@
 import { PlaybackState } from './state';
 import { PlayableTrack } from './interfaces';
+import { observable } from 'mobx';
 
 /**
  * A source agnostic media player object. It initializes with a playback state and defines the API to manipulate it.
@@ -8,7 +9,7 @@ import { PlayableTrack } from './interfaces';
  * @class Player
  */
 export class Player {
-    _playbackState: PlaybackState;
+    @observable _playbackState: PlaybackState;
     constructor() {
         this._playbackState = new PlaybackState();
         // TODO: Setup event handling logic.
@@ -37,6 +38,7 @@ export class Player {
     // startPlayback() starts the playback loop.
     startPlayback(): boolean {
         // TODO: Implement loop start and event monitoring.
+        console.log(this._playbackState);
         this._playbackState.currentTrack?.IMediaProvider.play().then(() => {
             this._playbackState.isPlaying = true;
         });
@@ -49,5 +51,9 @@ export class Player {
 
     addPlayableTrack(playableTrack: PlayableTrack) {
         this._playbackState.currentPlaylist.addTrack(playableTrack);
+        // If playlist was empty, set the first track to play.
+        if (this._playbackState.currentPlaylist.size == 1) {
+            this._playbackState.setCurrentTrackIndex(0);
+        }
     }
 }

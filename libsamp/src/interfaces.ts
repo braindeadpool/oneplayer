@@ -15,14 +15,6 @@ export interface ITrackInfo {
  */
 interface IIMediaProviderState {
     /**
-     * An ordered array of track info objects.
-     *
-     * @type {Array<ITrackInfo>}
-     * @memberof IIMediaProviderState
-     */
-    playlist: Array<ITrackInfo>;
-
-    /**
      *
      *
      * @type {number}
@@ -66,12 +58,13 @@ export interface IMediaProvider {
     getCurrentState(): Promise<IIMediaProviderState>;
 
     /**
-     * play() starts the playback from the current track time.
+     * play() resumes the playback from the current track time or starts a new provided track.
      *
+     * @param {track} ITrackInfo optionally a new track to play.
      * @returns {Promise<boolean>} indicates whether the play succeeded.
      * @memberof IMediaProvider
      */
-    play(): Promise<boolean>;
+    play(track?: ITrackInfo): Promise<boolean>;
 
     /**
      * pause() pauses the playback at the current track time.
@@ -115,30 +108,7 @@ export interface IMediaProvider {
      */
     getVolume(): Promise<number>;
 
-    /**
-     * next() starts playing the next track.
-     *
-     * @returns {Promise<IIMediaProviderState>} indicates the new player state.
-     * @memberof IMediaProvider
-     */
-    next(): Promise<IIMediaProviderState>;
-
-    /**
-     * previous() starts playing the previous track.
-     *
-     * @returns {Promise<IIMediaProviderState>} indicates the new player state.
-     * @memberof IMediaProvider
-     */
-    previous(): Promise<IIMediaProviderState>;
-
-    /**
-     * goToIndex() sets the current track to the position indicated.
-     *
-     * @param {number} index
-     * @returns {Promise<IIMediaProviderState>} the new player state.
-     * @memberof IMediaProvider
-     */
-    goToIndex(index: number): Promise<IIMediaProviderState>;
+    setupTrack(track: ITrackInfo | null): Promise<boolean>;
 }
 
 /**

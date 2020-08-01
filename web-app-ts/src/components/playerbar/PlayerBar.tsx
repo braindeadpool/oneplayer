@@ -4,11 +4,12 @@ import { SliderBar } from './SliderBar';
 import { PlayPauseButton } from './PlayPauseButton';
 import { Box } from '@material-ui/core';
 import { NowPlaying } from './NowPlaying';
-import { GlobalStateContext } from '../../context/GlobalState';
+import { useGlobalStore } from '../../context/GlobalState';
+import { observer } from 'mobx-react-lite';
 
-export const PlayerBar: React.FC = () => {
-    const globalState = useContext(GlobalStateContext);
-    const currentTrackName = globalState.player.playbackState.currentTrack?.mediaID;
+export const PlayerBar: React.FC = observer(() => {
+    const globalStore = useGlobalStore();
+    const currentTrackName = globalStore.player.playbackState.currentTrack?.mediaID;
     return (
         <>
             <Box p={'1%'}>
@@ -28,4 +29,4 @@ export const PlayerBar: React.FC = () => {
             </Box>
         </>
     );
-};
+});

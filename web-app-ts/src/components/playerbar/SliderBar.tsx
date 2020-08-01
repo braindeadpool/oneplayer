@@ -2,14 +2,14 @@ import React, { useContext } from 'react';
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { GlobalStateContext } from '../../context/GlobalState';
+import { useGlobalStore } from '../../context/GlobalState';
+import { observer } from 'mobx-react-lite';
 
-export const SliderBar: React.FC = () => {
-    const globalState = useContext(GlobalStateContext);
-    // const globalDispatch = useContext(GlobalDispatchContext);
+export const SliderBar: React.FC = observer(() => {
+    const globalStore = useGlobalStore();
 
-    const currentTrackTimeInSeconds = globalState.player.playbackState.currentTimeInTrackMilliseconds * 1000;
-    const currentTrackDurationInSeconds = globalState.player.playbackState.currentTrackLengthInMilliseconds * 1000;
+    const currentTrackTimeInSeconds = globalStore.player.playbackState.currentTimeInTrackMilliseconds * 1000;
+    const currentTrackDurationInSeconds = globalStore.player.playbackState.currentTrackLengthInMilliseconds * 1000;
 
     return (
         <>
@@ -21,4 +21,4 @@ export const SliderBar: React.FC = () => {
             />
         </>
     );
-};
+});

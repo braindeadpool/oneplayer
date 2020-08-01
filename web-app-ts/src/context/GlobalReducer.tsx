@@ -1,8 +1,8 @@
 import { Reducer } from 'react';
-import { IGlobalStateContext, Action } from './interfaces';
+import { IglobalStoreContext, Action } from './interfaces';
 
 // GlobalReducer updates the playback state depending on the action and returns it.
-export const GlobalReducer: Reducer<IGlobalStateContext, Action> = (state, action) => {
+export const GlobalReducer: Reducer<IglobalStoreContext, Action> = (state, action) => {
     switch (action.type) {
         case 'previous':
             state.player.playbackState.previous();

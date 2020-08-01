@@ -46,7 +46,12 @@
     "license": "ISC",
     "description": "Source agnostic media player library.",
     "dependencies": {
+        "@types/video.js": "^7.3.10",
+        "@types/youtube-player": "^5.5.3",
         "jest": "^25.2.7",
-        "standard": "^14.3.3"
+        "mobx": "^5.15.4",
+        "standard": "^14.3.3",
+        "video.js": "^7.8.4",
+        "youtube-player": "^5.5.2"
     }
 }

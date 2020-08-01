@@ -1,28 +1,33 @@
 import React, { useEffect, useContext } from 'react';
 import { PlayerBar } from './playerbar/PlayerBar';
 import Typography from '@material-ui/core/Typography';
-import { GlobalStateContext, GlobalDispatchContext } from '../context/GlobalState';
-import { PlyrProvider } from 'libsamp';
+import { useGlobalStore } from '../context/GlobalState';
+import { YouTubeProvider } from 'libsamp';
+import { observer } from 'mobx-react-lite';
 
-export const DemoContainer: React.FC = (props) => {
-    const globalState = useContext(GlobalStateContext);
-    const globalDispatch = useContext(GlobalDispatchContext);
+export const DemoContainer: React.FC = observer((props) => {
+    const globalStore = useGlobalStore();
 
-    // Initialize the demo video as the current playing track
-    const plyrProvider = new PlyrProvider('#demoPlayer');
-    plyrProvider.init().then(() => {
-        // Let's setup the initial demo track.
-        const demoTrack = plyrProvider.makePlayableTrack(
-            {
-                durationInMilliseconds: 1000000,
-                source: 'xuCn8ux2gbs',
-                provider: 'youtube',
-            },
-            'xuCn8ux2gbs',
-        );
-        // Let's dispatch to add the new track and start playback.
-        globalDispatch({ type: 'addTrack', payload: demoTrack });
-        globalDispatch({ type: 'play' });
+    useEffect(() => {
+        // Initialize the demo video as the current playing track
+        const youtubeElement: HTMLElement | null = document.getElementById('demoPlayer');
+        if (youtubeElement) {
+            const youtubeProvider = new YouTubeProvider(youtubeElement);
+            youtubeProvider.init().then(() => {
+                // Let's setup the initial demo track.
+                const demoTrack = youtubeProvider.makePlayableTrack(
+                    {
+                        durationInMilliseconds: 1000000,
+                        source: 'xuCn8ux2gbs',
+                    },
+                    'xuCn8ux2gbs',
+                );
+                // // Let's dispatch to add the new track and start playback.
+                globalStore.player.addPlayableTrack(demoTrack);
+
+                globalStore.mediaProviders.set('demoPlayer', youtubeProvider);
+            });
+        }
     });
 
     return (
@@ -31,8 +36,8 @@ export const DemoContainer: React.FC = (props) => {
                 {' '}
                 OnePlayerDemo{' '}
             </Typography>
-            <div id="demoPlayer"></div>
+            <iframe id="demoPlayer"></iframe>
             <PlayerBar></PlayerBar>
         </div>
     );
-};
+});

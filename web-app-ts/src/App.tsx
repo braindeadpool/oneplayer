@@ -9,7 +9,7 @@ import { SearchBar } from './components/navbar/SearchBar';
 import MenuItem from '@material-ui/core/MenuItem';
 import './App.css';
 
-import { GlobalContextProvider } from './context/GlobalState';
+import { GlobalStoreContextProvider } from './context/GlobalState';
 
 export const App: React.FC = () => {
     return (
@@ -33,15 +33,15 @@ export const App: React.FC = () => {
 
             <Switch>
                 <Route path="/demo">
-                    <GlobalContextProvider>
+                    <GlobalStoreContextProvider>
                         <DemoContainer />
-                    </GlobalContextProvider>
+                    </GlobalStoreContextProvider>
                 </Route>
 
                 <Route path="/">
-                    <GlobalContextProvider>
+                    <GlobalStoreContextProvider>
                         <MainContainer />
-                    </GlobalContextProvider>
+                    </GlobalStoreContextProvider>
                 </Route>
             </Switch>
         </HashRouter>

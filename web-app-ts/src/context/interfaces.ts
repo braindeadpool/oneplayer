@@ -6,6 +6,6 @@ export type Action = {
     payload?: any;
 };
 
-export interface IGlobalStateContext {
+export interface IglobalStoreContext {
     player: Player;
 }

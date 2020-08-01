@@ -1,12 +1,22 @@
+import { observable } from 'mobx';
 import { Playlist } from './interfaces';
 
 export class PlaybackState {
+    @observable currentPlaylist: Playlist;
+    @observable currentTrackIndex: number = -1;
+    @observable currentTimeInTrackMilliseconds: number = 0.0;
+    @observable isPlaying: boolean = false;
+
     constructor(
-        public currentPlaylist: Playlist = new Playlist(),
-        public currentTrackIndex: number = -1,
-        public currentTimeInTrackMilliseconds: number = 0.0,
-        public isPlaying: boolean = false,
-    ) {}
+        currentPlaylist: Playlist = new Playlist(),
+        currentTrackIndex: number = -1,
+        currentTimeInTrackMilliseconds: number = 0.0,
+    ) {
+        this.currentPlaylist = currentPlaylist;
+        this.currentTrackIndex = currentTrackIndex;
+        this.currentTimeInTrackMilliseconds = currentTimeInTrackMilliseconds;
+        this.isPlaying = false; // always initialized as false
+    }
 
     previous() {
         if (this.currentPlaylist.size < 1) {
@@ -35,6 +45,7 @@ export class PlaybackState {
         this.currentTrackIndex += 1;
         this.currentTrackIndex %= this.currentPlaylist.size;
         this.currentTimeInTrackMilliseconds = 0;
+        this.currentTrack?.IMediaProvider.setupTrack(this.currentTrack.trackInfo);
         return true;
     }
 

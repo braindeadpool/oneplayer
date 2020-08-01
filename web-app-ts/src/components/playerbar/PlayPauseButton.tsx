@@ -3,21 +3,21 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilled from '@material-ui/icons/PauseCircleFilled';
 
-import { GlobalStateContext, GlobalDispatchContext } from '../../context/GlobalState';
+import { useGlobalStore } from '../../context/GlobalState';
+import { observer } from 'mobx-react-lite';
 
-export const PlayPauseButton: React.FC = () => {
-    const globalState = useContext(GlobalStateContext);
-    const globalDispatch = useContext(GlobalDispatchContext);
+export const PlayPauseButton: React.FC = observer(() => {
+    const globalStore = useGlobalStore();
 
     const togglePlaying = () => {
-        if (globalState.player.playbackState.isPlaying) {
-            globalDispatch({ type: 'pause' });
+        if (globalStore.player.playbackState.isPlaying) {
+            globalStore.player.pause();
         } else {
-            globalDispatch({ type: 'play' });
+            globalStore.player.play();
         }
     };
 
-    const isPlaying = globalState.player.playbackState.isPlaying;
+    const isPlaying = globalStore.player.playbackState.isPlaying;
     return (
         <>
             <IconButton
@@ -29,4 +29,4 @@ export const PlayPauseButton: React.FC = () => {
             </IconButton>
         </>
     );
-};
+});
