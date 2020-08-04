@@ -36,7 +36,7 @@ export const DemoContainer: React.FC = observer((props) => {
                 {' '}
                 OnePlayerDemo{' '}
             </Typography>
-            <iframe id="demoPlayer"></iframe>
+            <div id="demoPlayer"></div>
             <PlayerBar></PlayerBar>
         </div>
     );

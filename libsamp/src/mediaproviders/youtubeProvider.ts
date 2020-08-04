@@ -1,4 +1,4 @@
-import YouTubePlayer from 'youtube-player';
+import YTPlayer from 'yt-player';
 import { IMediaProvider, PlayableTrack, ITrackInfo } from '../interfaces';
 import { MILLISECONDS_IN_SECOND } from '../constants';
 
@@ -15,8 +15,12 @@ export class YouTubeProvider implements IMediaProvider {
      * @memberof VideoJSProvider
      */
     constructor(private _attachPoint: HTMLElement | string) {
-        console.log(_attachPoint);
-        this._player = YouTubePlayer(this._attachPoint);
+        if (typeof document === 'undefined') {
+            console.log('YouTube IFrame API needs a client-side document.');
+            return;
+        }
+
+        this._player = new YTPlayer(this._attachPoint);
         window['yt'] = this._player;
     }
 
@@ -37,33 +41,58 @@ export class YouTubeProvider implements IMediaProvider {
     }
 
     play(track: any | null = null) {
+        console.log('youtubeProvider.play() called with', track);
         if (track) {
-            this.setupTrack(track.source).then(this._player.playVideo());
-        } else {
-            return this._player.playVideo();
+            this.setupTrack(track.source);
         }
+        return new Promise<boolean>((resolve, reject) => {
+            this._player.play();
+            console.log('youtubeProvider._player.play() called');
+            this._player.on('playing', () => {
+                resolve(true);
+            });
+            this._player.on('unplayable', () => {
+                reject(false);
+            });
+            this._player.on('error', () => {
+                reject(false);
+            });
+        });
     }
 
     pause() {
-        return this._player.pauseVideo();
+        return new Promise<boolean>((resolve, reject) => {
+            this._player.pause();
+            this._player.on('paused', () => {
+                resolve(true);
+            });
+            this._player.on('error', () => {
+                reject(false);
+            });
+        });
     }
 
     togglePlayPause() {
-        // DO nothing for now
+        if (this._player.getState() == 'paused' || this._player.getState() == 'cued') {
+            this._player.play();
+        } else {
+            this._player.pause();
+        }
+
         return Promise.resolve(true);
     }
 
     seek(targetTimeInMilliseconds: number) {
-        return this._player.seekTo(targetTimeInMilliseconds / MILLISECONDS_IN_SECOND);
+        return this._player.seek(targetTimeInMilliseconds / MILLISECONDS_IN_SECOND);
     }
 
     setVolume(volume: number) {
-        this._player.volume(volume);
-        return Promise.resolve(this._player.volume());
+        this._player.setVolume(volume);
+        return Promise.resolve(this._player.getVolume());
     }
 
     getVolume() {
-        return Promise.resolve(this._player.volume());
+        return Promise.resolve(this._player.getVolume());
     }
 
     makePlayableTrack(trackInfo: YouTubeTrackInfo, mediaID: string): PlayableTrack {
@@ -73,7 +102,6 @@ export class YouTubeProvider implements IMediaProvider {
 
     setupTrack(track: any) {
         console.log('track = ', track);
-        this._player.loadVideoById(track.source);
-        return this._player.pauseVideo();
+        return this._player.load(track.source);
     }
 }

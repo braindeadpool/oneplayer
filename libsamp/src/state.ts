@@ -30,6 +30,7 @@ export class PlaybackState {
         this.currentTrackIndex += this.currentPlaylist.size - 1;
         this.currentTrackIndex %= this.currentPlaylist.size;
         this.currentTimeInTrackMilliseconds = 0;
+
         return true;
     }
 
@@ -53,8 +54,10 @@ export class PlaybackState {
         if (index < 0 || index >= this.currentPlaylist.size) {
             return false;
         }
+
         this.currentTrackIndex = index;
         this.currentTimeInTrackMilliseconds = 0;
+        this.currentTrack?.IMediaProvider.setupTrack(this.currentTrack.trackInfo);
         return true;
     }
 

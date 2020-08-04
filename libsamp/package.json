@@ -48,10 +48,12 @@
     "dependencies": {
         "@types/video.js": "^7.3.10",
         "@types/youtube-player": "^5.5.3",
+        "@types/yt-player": "^3.4.2",
         "jest": "^25.2.7",
         "mobx": "^5.15.4",
         "standard": "^14.3.3",
         "video.js": "^7.8.4",
-        "youtube-player": "^5.5.2"
+        "youtube-player": "^5.5.2",
+        "yt-player": "^3.4.3"
     }
 }
