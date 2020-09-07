@@ -1,4 +1,3 @@
-import YTPlayer from 'yt-player';
 import { IMediaProvider, PlayableTrack, ITrackInfo } from '../interfaces';
 import { MILLISECONDS_IN_SECOND } from '../constants';
 
@@ -6,22 +5,84 @@ interface YouTubeTrackInfo extends ITrackInfo {
     source: string;
 }
 
+enum YTPlayerState {
+    UNSTARTED = -1,
+    ENDED,
+    PLAYING,
+    PAUSED,
+    BUFFERING,
+    VIDEO_CUED,
+}
+
 export class YouTubeProvider implements IMediaProvider {
     private _player: any;
-
+    private _attachPoint: HTMLElement;
+    private _playerIsReady: boolean;
     /**
      * Creates an instance of YoutubeProvider.
      * @param {(Element | string)} _attachPoint the DOM Element or id of the dom element where the youtube player object will render to.
      * @memberof VideoJSProvider
      */
-    constructor(private _attachPoint: HTMLElement | string) {
+    constructor(_attachPointOrString: HTMLElement | string) {
+        this._player = null;
+        this._playerIsReady = false;
         if (typeof document === 'undefined') {
             console.log('YouTube IFrame API needs a client-side document.');
             return;
         }
 
-        this._player = new YTPlayer(this._attachPoint);
-        window['yt'] = this._player;
+        if (typeof _attachPointOrString === 'string') {
+            const elementWithId = document.getElementById(_attachPointOrString);
+            if (elementWithId === null) {
+                this._attachPoint = document.createElement('div');
+                this._attachPoint.setAttribute('id', _attachPointOrString);
+            } else {
+                this._attachPoint = elementWithId;
+            }
+        }
+
+        /* Dynamically load the Youtube IFrame API */
+        /* https://developers.google.com/youtube/iframe_api_reference */
+        let tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        let firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode!.insertBefore(tag, firstScriptTag);
+
+        (<any>window).onYouTubeIframeAPIReady = this.onYouTubeIframeAPIReady.bind(this);
+    }
+
+    onYouTubeIframeAPIReady() {
+        // Check if already loaded
+        if (this._player != null && this._playerIsReady) {
+            return;
+        }
+        this._player = new (<any>window).YT.Player(this._attachPoint, {
+            height: '480',
+            width: '640',
+            videoId: 'M7lc1UVf-VE',
+            events: {
+                onReady: this.onPlayerReady.bind(this),
+                onStateChange: this.onPlayerStateChange.bind(this),
+            },
+            playerVars: {
+                autoplay: 0,
+                showinfo: 0,
+                controls: 0,
+            },
+        });
+        console.log('YT API Ready invoked!');
+    }
+
+    onPlayerReady(event: any) {
+        console.log('YT Player Ready!');
+        // Hack to allow full functionality
+        this._player = event.target;
+        this._playerIsReady = true;
+    }
+
+    onPlayerStateChange(event: any) {
+        console.log('YT Player state changed!');
+        console.log('Event: ', event);
     }
 
     init(): Promise<boolean> {
@@ -30,13 +91,23 @@ export class YouTubeProvider implements IMediaProvider {
         // this._player.loop = false;
         // this._player.volume = 1.0;
         // this._player.currentTime = 0.0;
-        return Promise.resolve(true);
+        if (this._player != null && this._playerIsReady) {
+            return Promise.resolve(true);
+        }
+
+        return new Promise((resolve) => {
+            // Wait 5 seconds for API to load
+            setTimeout(() => {
+                this.onYouTubeIframeAPIReady();
+                resolve(true);
+            }, 5000);
+        });
     }
 
     getCurrentState() {
         return Promise.resolve({
             currentTrackIndex: 0,
-            currentTrackTimeMilliseconds: this._player.currentTime() * MILLISECONDS_IN_SECOND,
+            currentTrackTimeMilliseconds: this._player.getCurrentTime() * MILLISECONDS_IN_SECOND,
         });
     }
 
@@ -45,30 +116,16 @@ export class YouTubeProvider implements IMediaProvider {
         if (track) {
             this.setupTrack(track.source);
         }
-        return new Promise<boolean>((resolve, reject) => {
-            this._player.play();
-            console.log('youtubeProvider._player.play() called');
-            this._player.on('playing', () => {
-                resolve(true);
-            });
-            this._player.on('unplayable', () => {
-                reject(false);
-            });
-            this._player.on('error', () => {
-                reject(false);
-            });
+        return new Promise<boolean>((resolve) => {
+            this._player.playVideo();
+            resolve(this._player.getPlayerState() == YTPlayerState.PLAYING);
         });
     }
 
     pause() {
-        return new Promise<boolean>((resolve, reject) => {
-            this._player.pause();
-            this._player.on('paused', () => {
-                resolve(true);
-            });
-            this._player.on('error', () => {
-                reject(false);
-            });
+        return new Promise<boolean>((resolve) => {
+            this._player.pauseVideo();
+            resolve(this._player.getPlayerState() == YTPlayerState.PAUSED);
         });
     }
 
@@ -83,7 +140,7 @@ export class YouTubeProvider implements IMediaProvider {
     }
 
     seek(targetTimeInMilliseconds: number) {
-        return this._player.seek(targetTimeInMilliseconds / MILLISECONDS_IN_SECOND);
+        return this._player.seekTo(targetTimeInMilliseconds / MILLISECONDS_IN_SECOND);
     }
 
     setVolume(volume: number) {
@@ -102,6 +159,6 @@ export class YouTubeProvider implements IMediaProvider {
 
     setupTrack(track: any) {
         console.log('track = ', track);
-        return this._player.load(track.source);
+        return this._player.loadVideoById(track.source);
     }
 }

@@ -10,24 +10,22 @@ export const DemoContainer: React.FC = observer((props) => {
 
     useEffect(() => {
         // Initialize the demo video as the current playing track
-        const youtubeElement: HTMLElement | null = document.getElementById('demoPlayer');
-        if (youtubeElement) {
-            const youtubeProvider = new YouTubeProvider(youtubeElement);
-            youtubeProvider.init().then(() => {
-                // Let's setup the initial demo track.
-                const demoTrack = youtubeProvider.makePlayableTrack(
-                    {
-                        durationInMilliseconds: 1000000,
-                        source: 'xuCn8ux2gbs',
-                    },
-                    'xuCn8ux2gbs',
-                );
-                // // Let's dispatch to add the new track and start playback.
-                globalStore.player.addPlayableTrack(demoTrack);
 
-                globalStore.mediaProviders.set('demoPlayer', youtubeProvider);
-            });
-        }
+        const youtubeProvider = new YouTubeProvider('demoPlayer');
+        youtubeProvider.init().then(() => {
+            // Let's setup the initial demo track.
+            const demoTrack = youtubeProvider.makePlayableTrack(
+                {
+                    durationInMilliseconds: 1000000,
+                    source: 'xuCn8ux2gbs',
+                },
+                'xuCn8ux2gbs',
+            );
+            // // Let's dispatch to add the new track and start playback.
+            globalStore.player.addPlayableTrack(demoTrack);
+
+            globalStore.mediaProviders.set('demoPlayer', youtubeProvider);
+        });
     });
 
     return (
