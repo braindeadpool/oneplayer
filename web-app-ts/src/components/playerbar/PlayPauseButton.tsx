@@ -10,14 +10,14 @@ export const PlayPauseButton: React.FC = observer(() => {
     const globalStore = useGlobalStore();
 
     const togglePlaying = () => {
-        if (globalStore.player.playbackState.isPlaying) {
+        if (globalStore.player.isPlaying) {
             globalStore.player.pause();
         } else {
             globalStore.player.play();
         }
     };
 
-    const isPlaying = globalStore.player.playbackState.isPlaying;
+    const isPlaying = globalStore.player.isPlaying;
     return (
         <>
             <IconButton

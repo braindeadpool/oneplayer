@@ -5,10 +5,10 @@ import { IglobalStoreContext, Action } from './interfaces';
 export const GlobalReducer: Reducer<IglobalStoreContext, Action> = (state, action) => {
     switch (action.type) {
         case 'previous':
-            state.player.playbackState.previous();
+            state.player.previous();
             break;
         case 'next':
-            state.player.playbackState.next();
+            state.player.next();
             break;
         case 'addTrack':
             console.log('addTrack dispatch');

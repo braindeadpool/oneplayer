@@ -1,6 +1,9 @@
-import { PlaybackState } from './state';
-import { PlayableTrack } from './interfaces';
+import { Playlist, PlayableTrack } from './interfaces';
+
 import { observable } from 'mobx';
+
+// At what intervals to update the track time.
+const TIME_UPDATE_INTERVAL = 100;
 
 /**
  * A source agnostic media player object. It initializes with a playback state and defines the API to manipulate it.
@@ -9,51 +12,110 @@ import { observable } from 'mobx';
  * @class Player
  */
 export class Player {
-    @observable _playbackState: PlaybackState;
+    @observable currentPlaylist: Playlist;
+    @observable currentTrackIndex: number = -1;
+    @observable isPlaying: boolean = false;
+    @observable currentTrackTimeInMilliseconds: number;
+
+    private _timeUpdateInterval: any;
+
     constructor() {
-        this._playbackState = new PlaybackState();
-        // TODO: Setup event handling logic.
+        this.currentPlaylist = new Playlist();
+        this.currentTrackIndex = -1;
+        this.isPlaying = false;
+        this.currentTrackTimeInMilliseconds = 0;
+        this._timeUpdateInterval = null;
     }
 
-    play(): boolean {
-        if (!this._playbackState.isPlaying) {
-            if (!this._playbackState.currentTrackIndex || this._playbackState.hasCurrentTrackFinished()) {
-                this._playbackState.next();
-            }
-
-            this._playbackState.isPlaying = this.startPlayback();
+    get currentTrack() {
+        if (this.currentPlaylist.size > 0) {
+            return this.currentPlaylist.tracks[this.currentTrackIndex];
         }
-        return this._playbackState.isPlaying;
+        return null;
     }
 
-    pause(): boolean {
-        if (!this._playbackState.isPlaying) {
+    play() {
+        if (this.isPlaying) return;
+
+        this.currentTrack?.IMediaProvider.play().then(() => {
+            this.isPlaying = true;
+            // setup updating the time if not set already
+            if (!this._timeUpdateInterval === null) return;
+
+            this._timeUpdateInterval = setInterval(() => {
+                this.currentTrack?.IMediaProvider.getCurrentTrackTimeInMilliseconds().then((value) => {
+                    this.currentTrackTimeInMilliseconds = value;
+                });
+            }, TIME_UPDATE_INTERVAL);
+        });
+    }
+
+    pause() {
+        this.currentTrack?.IMediaProvider.pause().then(() => {
+            this.isPlaying = false;
+            clearInterval(this._timeUpdateInterval);
+            this._timeUpdateInterval = null;
+        });
+    }
+
+    previous(): boolean {
+        if (this.currentPlaylist.size < 1) {
+            return false;
         }
-        this._playbackState.currentTrack?.IMediaProvider.pause().then(() => {
-            this._playbackState.isPlaying = false;
-        });
-        return this._playbackState.isPlaying;
+
+        if (!this.currentPlaylist.shouldLoopOver && this.currentTrackIndex == 0) {
+            return false;
+        }
+
+        this.currentTrackIndex += this.currentPlaylist.size - 1;
+        this.currentTrackIndex %= this.currentPlaylist.size;
+        this.currentTrackTimeInMilliseconds = 0;
+
+        // if the existing state was playing, then we start the playback of the new track.
+        if (this.isPlaying) {
+            this.play();
+        }
+
+        return true;
     }
 
-    // startPlayback() starts the playback loop.
-    startPlayback(): boolean {
-        // TODO: Implement loop start and event monitoring.
-        console.log(this._playbackState);
-        this._playbackState.currentTrack?.IMediaProvider.play().then(() => {
-            this._playbackState.isPlaying = true;
-        });
-        return this._playbackState.isPlaying;
+    next(): boolean {
+        if (this.currentPlaylist.size < 1) {
+            return false;
+        }
+
+        if (!this.currentPlaylist.shouldLoopOver && this.currentTrackIndex == this.currentPlaylist.size - 1) {
+            return false;
+        }
+
+        this.currentTrackIndex += 1;
+        this.currentTrackIndex %= this.currentPlaylist.size;
+        this.currentTrackTimeInMilliseconds = 0;
+        this.currentTrack?.IMediaProvider.setupTrack(this.currentTrack.trackInfo);
+
+        // if the existing state was playing, then we start the playback of the new track.
+        if (this.isPlaying) {
+            this.play();
+        }
+
+        return true;
     }
 
-    get playbackState() {
-        return this._playbackState;
+    setCurrentTrackIndex(index: number) {
+        if (index < 0 || index >= this.currentPlaylist.size) {
+            return false;
+        }
+
+        this.currentTrackIndex = index;
+        this.currentTrack?.IMediaProvider.setupTrack(this.currentTrack.trackInfo);
+        return true;
     }
 
     addPlayableTrack(playableTrack: PlayableTrack) {
-        this._playbackState.currentPlaylist.addTrack(playableTrack);
+        this.currentPlaylist.addTrack(playableTrack);
         // If playlist was empty, set the first track to play.
-        if (this._playbackState.currentPlaylist.size == 1) {
-            this._playbackState.setCurrentTrackIndex(0);
+        if (this.currentPlaylist.size == 1) {
+            this.setCurrentTrackIndex(0);
         }
     }
 }

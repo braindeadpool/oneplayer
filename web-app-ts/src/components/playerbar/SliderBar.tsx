@@ -8,8 +8,12 @@ import { observer } from 'mobx-react-lite';
 export const SliderBar: React.FC = observer(() => {
     const globalStore = useGlobalStore();
 
-    const currentTrackTimeInSeconds = globalStore.player.playbackState.currentTimeInTrackMilliseconds * 1000;
-    const currentTrackDurationInSeconds = globalStore.player.playbackState.currentTrackLengthInMilliseconds * 1000;
+    let currentTrackTimeInSeconds = Math.floor(globalStore.player.currentTrackTimeInMilliseconds / 1000);
+    const currentTrack = globalStore.player.currentTrack;
+    let currentTrackDurationInSeconds = 0;
+    if (currentTrack != null) {
+        currentTrackDurationInSeconds = Math.floor(currentTrack.trackInfo.durationInMilliseconds / 1000);
+    }
 
     return (
         <>

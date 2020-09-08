@@ -16,7 +16,7 @@ export const DemoContainer: React.FC = observer((props) => {
             // Let's setup the initial demo track.
             const demoTrack = youtubeProvider.makePlayableTrack(
                 {
-                    durationInMilliseconds: 1000000,
+                    durationInMilliseconds: 1165000,
                     source: 'xuCn8ux2gbs',
                 },
                 'xuCn8ux2gbs',

@@ -105,10 +105,7 @@ export class YouTubeProvider implements IMediaProvider {
     }
 
     getCurrentState() {
-        return Promise.resolve({
-            currentTrackIndex: 0,
-            currentTrackTimeMilliseconds: this._player.getCurrentTime() * MILLISECONDS_IN_SECOND,
-        });
+        return Promise.resolve(this._player.getPlayerState());
     }
 
     play(track: any | null = null) {
@@ -150,6 +147,10 @@ export class YouTubeProvider implements IMediaProvider {
 
     getVolume() {
         return Promise.resolve(this._player.getVolume());
+    }
+
+    getCurrentTrackTimeInMilliseconds() {
+        return Promise.resolve(this._player.getCurrentTime() * MILLISECONDS_IN_SECOND);
     }
 
     makePlayableTrack(trackInfo: YouTubeTrackInfo, mediaID: string): PlayableTrack {

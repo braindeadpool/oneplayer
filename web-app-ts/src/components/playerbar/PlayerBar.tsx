@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite';
 
 export const PlayerBar: React.FC = observer(() => {
     const globalStore = useGlobalStore();
-    const currentTrackName = globalStore.player.playbackState.currentTrack?.mediaID;
+    const currentTrackName = globalStore.player.currentTrack?.mediaID;
     return (
         <>
             <Box p={'1%'}>

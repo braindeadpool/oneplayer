@@ -13,23 +13,7 @@ export interface ITrackInfo {
  *
  * @interface IIMediaProviderState
  */
-interface IIMediaProviderState {
-    /**
-     *
-     *
-     * @type {number}
-     * @memberof IIMediaProviderState
-     */
-    currentTrackIndex: number;
-
-    /**
-     *
-     *
-     * @type {number}
-     * @memberof IIMediaProviderState
-     */
-    currentTrackTimeMilliseconds: number;
-}
+interface IIMediaProviderState {}
 
 /**
  * IMediaProvider is an interface implemented by an SDK or a wrapper around an SDK of every media player supported by libSAMP.
@@ -107,6 +91,8 @@ export interface IMediaProvider {
      * @memberof IMediaProvider
      */
     getVolume(): Promise<number>;
+
+    getCurrentTrackTimeInMilliseconds(): Promise<number>;
 
     setupTrack(track: ITrackInfo | null): Promise<boolean>;
 }
