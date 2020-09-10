@@ -55,8 +55,6 @@ export class Player {
     pause() {
         this.currentTrack?.IMediaProvider.pause().then(() => {
             this.isPlaying = false;
-            clearInterval(this._timeUpdateInterval);
-            this._timeUpdateInterval = null;
         });
     }
 

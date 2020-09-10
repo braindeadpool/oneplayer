@@ -57,8 +57,8 @@ export class YouTubeProvider implements IMediaProvider {
             return;
         }
         this._player = new (<any>window).YT.Player(this._attachPoint, {
-            height: '480',
-            width: '640',
+            height: '400',
+            width: '720',
             videoId: 'M7lc1UVf-VE',
             events: {
                 onReady: this.onPlayerReady.bind(this),

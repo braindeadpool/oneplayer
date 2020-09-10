@@ -1,3 +1,5 @@
+import { observable, action } from 'mobx';
+
 /**
  * ITrackInfo describes the playback details and metadata of a particular track.
  *
@@ -104,7 +106,12 @@ export interface IMediaProvider {
  * @class Playlist
  */
 export class Playlist {
-    constructor(private _orderedTracks: PlayableTrack[] = [], public shouldLoopOver: boolean = false) {}
+    @observable private _orderedTracks: PlayableTrack[];
+    @observable public shouldLoopOver: boolean;
+    constructor(orderedTracks: PlayableTrack[] = [], shouldLoopOver: boolean = false) {
+        this._orderedTracks = orderedTracks;
+        this.shouldLoopOver = shouldLoopOver;
+    }
 
     get size(): number {
         return this._orderedTracks.length;
@@ -120,6 +127,7 @@ export class Playlist {
      * @param {PlayableTrack} track
      * @memberof Playlist
      */
+    @action.bound
     addTrack(track: PlayableTrack) {
         this._orderedTracks.push(track);
     }
