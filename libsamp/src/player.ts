@@ -1,6 +1,6 @@
 import { Playlist, PlayableTrack } from './interfaces';
 
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 // At what intervals to update the track time.
 const TIME_UPDATE_INTERVAL = 100;
@@ -34,6 +34,7 @@ export class Player {
         return null;
     }
 
+    @action.bound
     play() {
         if (this.isPlaying) return;
 
@@ -50,6 +51,7 @@ export class Player {
         });
     }
 
+    @action.bound
     pause() {
         this.currentTrack?.IMediaProvider.pause().then(() => {
             this.isPlaying = false;
@@ -58,6 +60,7 @@ export class Player {
         });
     }
 
+    @action.bound
     previous(): boolean {
         if (this.currentPlaylist.size < 1) {
             return false;
@@ -79,6 +82,7 @@ export class Player {
         return true;
     }
 
+    @action.bound
     next(): boolean {
         if (this.currentPlaylist.size < 1) {
             return false;
@@ -101,6 +105,16 @@ export class Player {
         return true;
     }
 
+    @action.bound
+    seekTo(timeInMilliseconds: number) {
+        if (this.currentTrack == null) return;
+
+        if (timeInMilliseconds < 0 || timeInMilliseconds > this.currentTrack.trackInfo.durationInMilliseconds) return;
+
+        this.currentTrack.IMediaProvider.seekTo(timeInMilliseconds);
+    }
+
+    @action.bound
     setCurrentTrackIndex(index: number) {
         if (index < 0 || index >= this.currentPlaylist.size) {
             return false;
@@ -111,6 +125,7 @@ export class Player {
         return true;
     }
 
+    @action.bound
     addPlayableTrack(playableTrack: PlayableTrack) {
         this.currentPlaylist.addTrack(playableTrack);
         // If playlist was empty, set the first track to play.

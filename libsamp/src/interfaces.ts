@@ -67,13 +67,13 @@ export interface IMediaProvider {
     togglePlayPause(): Promise<boolean>;
 
     /**
-     * seek() seeks the current track to the specified time.
+     * seekTo() seeks the current track to the specified time.
      *
      * @param {number} targetTimeInMilliseconds
      * @returns {Promise<number>} the new time position in the current track.
      * @memberof IMediaProvider
      */
-    seek(targetTimeInMilliseconds: number): Promise<number>;
+    seekTo(targetTimeInMilliseconds: number): Promise<number>;
 
     /**
      * setVolume() sets the volume betwen 0 and 1.

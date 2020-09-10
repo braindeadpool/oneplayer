@@ -86,11 +86,6 @@ export class YouTubeProvider implements IMediaProvider {
     }
 
     init(): Promise<boolean> {
-        // Let's do some initial setups on the player.
-        // this._player.fullscreen.exit();
-        // this._player.loop = false;
-        // this._player.volume = 1.0;
-        // this._player.currentTime = 0.0;
         if (this._player != null && this._playerIsReady) {
             return Promise.resolve(true);
         }
@@ -136,7 +131,7 @@ export class YouTubeProvider implements IMediaProvider {
         return Promise.resolve(true);
     }
 
-    seek(targetTimeInMilliseconds: number) {
+    seekTo(targetTimeInMilliseconds: number) {
         return this._player.seekTo(targetTimeInMilliseconds / MILLISECONDS_IN_SECOND);
     }
 
@@ -159,7 +154,10 @@ export class YouTubeProvider implements IMediaProvider {
     }
 
     setupTrack(track: any) {
-        console.log('track = ', track);
-        return this._player.loadVideoById(track.source);
+        // load the video to be played
+        this._player.loadVideoById(track.source);
+        // we don't want to autoplay it here as soon as it loads.
+        this._player.pauseVideo();
+        return Promise.resolve(true);
     }
 }
