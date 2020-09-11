@@ -31,7 +31,7 @@ export const PlaylistItem: React.FC<PlaylistItemProps> = (props) => {
 
     return (
         <>
-            <ListItem key={props.uniqueID} selected={true}>
+            <ListItem button key={props.uniqueID} selected={true}>
                 <ListItemText primary={props.trackName}></ListItemText>
             </ListItem>
             <Divider />
