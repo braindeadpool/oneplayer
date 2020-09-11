@@ -118,8 +118,15 @@ export class Player {
             return false;
         }
 
+        // Save the current playing state to know whether to continue playing the new track or not.
+        const wasPlaying = this.isPlaying;
         this.currentTrackIndex = index;
         this.currentTrack?.IMediaProvider.setupTrack(this.currentTrack.trackInfo);
+        // setupTrack always pauses the new track after setup.
+        this.isPlaying = false;
+        if (wasPlaying) {
+            this.play();
+        }
         return true;
     }
 
