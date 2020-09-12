@@ -122,10 +122,13 @@ export class YouTubeProvider implements IMediaProvider {
     }
 
     togglePlayPause() {
-        if (this._player.getState() == 'paused' || this._player.getState() == 'cued') {
-            this._player.play();
+        if (
+            this._player.getPlayerState() == YTPlayerState.PAUSED ||
+            this._player.getPlayerState() == YTPlayerState.VIDEO_CUED
+        ) {
+            this.play();
         } else {
-            this._player.pause();
+            this.pause();
         }
 
         return Promise.resolve(true);
