@@ -3,7 +3,7 @@ import { PlayerBar } from './playerbar/PlayerBar';
 import { Playlist } from './playlist/Playlist';
 import Typography from '@material-ui/core/Typography';
 import { useGlobalStore } from '../context/GlobalState';
-import { YouTubeProvider } from 'libsamp';
+import { YouTubeProvider, SpotifyProvider } from 'libsamp';
 import { observer } from 'mobx-react-lite';
 import Grid from '@material-ui/core/Grid';
 
@@ -36,6 +36,22 @@ export const DemoContainer: React.FC = observer((props) => {
                         source: 'ZZfSm1u7YmM',
                     },
                     'The Joker | Chaos',
+                ),
+            );
+        });
+
+        // Let's add a Spotify track too
+        const spotifyAccessToken =
+            'BQAvkXKVBvH7LPKNutAg_goaWBanUYSFEo6MBwVYGxEf34j5rDWMBGeiib0IB0Gk9DqrTPo4JF8ykBjgJrlIk4xF-cwJpZmHtQr-hMRaIoH5JdhqlERNhFobT1mArKBT-rn1AX1tokUw-5MBU1jypBUtGlEB4d8olv1TL3_zwVw_U6gxMiME-rilItOkEiDCY51ClYphOAF8';
+        const spotifyProvider = new SpotifyProvider(spotifyAccessToken);
+        spotifyProvider.init().then(() => {
+            globalStore.player.addPlayableTrack(
+                spotifyProvider.makePlayableTrack(
+                    {
+                        durationInMilliseconds: 207000,
+                        source: '6112RGHQwT1lgG897P2eoq',
+                    },
+                    'You and me as one - Jack Savoretti, Sigma',
                 ),
             );
         });

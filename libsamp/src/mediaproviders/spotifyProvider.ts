@@ -1,12 +1,27 @@
-import { IMediaProvider } from '../interfaces';
+import { IMediaProvider, ITrackInfo, PlayableTrack } from '../interfaces';
+import axios, { AxiosInstance } from 'axios';
 
+// TODO: Move to config file.
+// const SPOTIFY_CLIENT_ID = 'e93896fc729f4ec496b7f178c81e3fa4';
+
+interface SpotifyTrackInfo extends ITrackInfo {
+    source: string;
+}
 export class SpotifyProvider implements IMediaProvider {
     private _player: any;
     private _playerIsReady: boolean;
     private _accessToken: string;
-
+    private _deviceID: string;
+    private _webAPIAxiosInstance: AxiosInstance;
     constructor(accessToken: string) {
         this._accessToken = accessToken;
+        this._deviceID = '';
+        this._webAPIAxiosInstance = axios.create({
+            baseURL: 'https://api.spotify.com/v1/',
+        });
+        this._webAPIAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${this._accessToken}`;
+        this._webAPIAxiosInstance.defaults.headers.put['Content-Type'] = 'application/json';
+
         if (typeof document === 'undefined') {
             console.log('Spotify Web Playback SDK needs a client-side document.');
             return;
@@ -40,6 +55,7 @@ export class SpotifyProvider implements IMediaProvider {
         // Ready
         this._player.addListener('ready', ({ device_id }: { device_id: string }) => {
             console.log('Ready with Device ID', device_id);
+            this._deviceID = device_id;
             this._playerIsReady = true;
         });
 
@@ -79,7 +95,9 @@ export class SpotifyProvider implements IMediaProvider {
     play(track: any | null = null) {
         console.log('spotifyProvider.play() called with', track);
         if (track) {
-            this.setupTrack(track.source);
+            return this._webAPIAxiosInstance.put(`me/player/play?device_id=${this._deviceID}`, {
+                uris: [`spotify:track:${track?.source}`],
+            });
         }
 
         return this._player.resume();
@@ -91,9 +109,17 @@ export class SpotifyProvider implements IMediaProvider {
         // TODO: Check if the state is indeed paused.
     }
 
-    setupTrack(track: any) {
+    setupTrack(track: SpotifyTrackInfo | null) {
+        console.log(track);
         //TODO: Implement loading the track via the Spotify Web API
-        return Promise.resolve(true);
+        return this._webAPIAxiosInstance
+            .put(`me/player/play?device_id=${this._deviceID}`, {
+                uris: [`spotify:track:${track?.source}`],
+            })
+            .then(() => {
+                // the setting up here starts the playback as well! Spotify API !
+                return this.pause();
+            });
     }
 
     togglePlayPause() {
@@ -121,5 +147,9 @@ export class SpotifyProvider implements IMediaProvider {
             }
             return state.position;
         });
+    }
+
+    makePlayableTrack(trackInfo: SpotifyTrackInfo, mediaID: string) {
+        return new PlayableTrack(trackInfo, this, mediaID);
     }
 }
