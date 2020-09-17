@@ -7,6 +7,7 @@ import { observable, action } from 'mobx';
  * @interface ITrackInfo
  */
 export interface ITrackInfo {
+    source: string;
     durationInMilliseconds: number;
 }
 
@@ -97,6 +98,10 @@ export interface IMediaProvider {
     getCurrentTrackTimeInMilliseconds(): Promise<number>;
 
     setupTrack(track: ITrackInfo | null): Promise<boolean>;
+}
+
+export interface IMetadata {
+    getTrackInfo(trackID: string): Promise<ITrackInfo>;
 }
 
 /**

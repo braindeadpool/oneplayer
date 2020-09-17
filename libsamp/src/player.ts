@@ -46,6 +46,9 @@ export class Player {
             this._timeUpdateInterval = setInterval(() => {
                 this.currentTrack?.IMediaProvider.getCurrentTrackTimeInMilliseconds().then((value) => {
                     this.currentTrackTimeInMilliseconds = value;
+                    if (this.currentTrackTimeInMilliseconds >= this.currentTrack!.trackInfo.durationInMilliseconds) {
+                        this.next();
+                    }
                 });
             }, TIME_UPDATE_INTERVAL);
         });
@@ -120,6 +123,8 @@ export class Player {
 
         // Save the current playing state to know whether to continue playing the new track or not.
         const wasPlaying = this.isPlaying;
+        // pause the current track (this could be from a different provider)
+        this.currentTrack?.IMediaProvider.pause();
         this.currentTrackIndex = index;
         this.currentTrack?.IMediaProvider.setupTrack(this.currentTrack.trackInfo);
         // setupTrack always pauses the new track after setup.

@@ -1,12 +1,11 @@
-import { IMediaProvider, ITrackInfo, PlayableTrack } from '../interfaces';
+import { IMediaProvider, PlayableTrack } from '../interfaces';
 import axios, { AxiosInstance } from 'axios';
+
+import { SpotifyTrackInfo } from '../metadataAPIs/SpotifyAPI';
 
 // TODO: Move to config file.
 // const SPOTIFY_CLIENT_ID = 'e93896fc729f4ec496b7f178c81e3fa4';
 
-interface SpotifyTrackInfo extends ITrackInfo {
-    source: string;
-}
 export class SpotifyProvider implements IMediaProvider {
     private _player: any;
     private _playerIsReady: boolean;
@@ -143,7 +142,7 @@ export class SpotifyProvider implements IMediaProvider {
         return this._player.getCurrentState().then((state: Spotify.PlaybackState) => {
             if (!state) {
                 console.error('User is not playing music through the Web Playback SDK');
-                return;
+                return 0;
             }
             return state.position;
         });

@@ -3,9 +3,16 @@ import { PlayerBar } from './playerbar/PlayerBar';
 import { Playlist } from './playlist/Playlist';
 import Typography from '@material-ui/core/Typography';
 import { useGlobalStore } from '../context/GlobalState';
+import { YouTubeContainer } from './mediaprovider/YouTubeContainer';
+import { SpotifyContainer } from './mediaprovider/SpotifyContainer';
 import { YouTubeProvider, SpotifyProvider } from 'libsamp';
 import { observer } from 'mobx-react-lite';
 import Grid from '@material-ui/core/Grid';
+import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
+
+const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
+const SPOTIFY_ACCESS_TOKEN =
+    'BQBNlX85PT9WCSlq9DMIW0PW3nM6XzUQgowTXI5-UVJWU8dzGZEj2QJ8RD7HX-rkebqXJUb3g3tKYiXafnVmnCDQeB2xjXDvva4Bz_F5BnyptbwcgQH5A2rE3HhzJjDRwdmG8z9i71jMwvcodiXMdoGuu9WOjAasl8Ve-upL1ecrOdehYq9Ku8nFjDRtaVwOIasmE3Px_y9r';
 
 export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
@@ -13,48 +20,58 @@ export const DemoContainer: React.FC = observer((props) => {
     useEffect(() => {
         // Initialize the demo video as the current playing track
 
-        const youtubeProvider = new YouTubeProvider('demoPlayer');
-        youtubeProvider.init().then(() => {
-            // Let's setup the initial demo track.
-            const demoTrack = youtubeProvider.makePlayableTrack(
-                {
-                    durationInMilliseconds: 1165000,
-                    source: 'xuCn8ux2gbs',
-                },
-                'history of the entire world, i guess',
-            );
-            // // Let's dispatch to add the new track and start playback.
-            globalStore.player.addPlayableTrack(demoTrack);
-
-            globalStore.mediaProviders.set('demoPlayer', youtubeProvider);
-
-            // Let's add another video to the playlist
-            globalStore.player.addPlayableTrack(
-                youtubeProvider.makePlayableTrack(
+        // Check if the mediaProvider already exists
+        if (!globalStore.mediaProviders.get('YouTube')) {
+            const youtubeProvider = new YouTubeProvider(YOUTUBE_IFRAME_DIV_ID);
+            youtubeProvider.init().then(() => {
+                // Let's setup the initial demo track.
+                const demoTrack = youtubeProvider.makePlayableTrack(
                     {
-                        durationInMilliseconds: 160000,
-                        source: 'ZZfSm1u7YmM',
+                        durationInMilliseconds: 1165000,
+                        source: 'xuCn8ux2gbs',
                     },
-                    'The Joker | Chaos',
-                ),
-            );
-        });
+                    'history of the entire world, i guess',
+                );
+                // // Let's dispatch to add the new track and start playback.
+                globalStore.player.addPlayableTrack(demoTrack);
 
-        // Let's add a Spotify track too
-        const spotifyAccessToken =
-            'BQAvkXKVBvH7LPKNutAg_goaWBanUYSFEo6MBwVYGxEf34j5rDWMBGeiib0IB0Gk9DqrTPo4JF8ykBjgJrlIk4xF-cwJpZmHtQr-hMRaIoH5JdhqlERNhFobT1mArKBT-rn1AX1tokUw-5MBU1jypBUtGlEB4d8olv1TL3_zwVw_U6gxMiME-rilItOkEiDCY51ClYphOAF8';
-        const spotifyProvider = new SpotifyProvider(spotifyAccessToken);
-        spotifyProvider.init().then(() => {
-            globalStore.player.addPlayableTrack(
-                spotifyProvider.makePlayableTrack(
-                    {
-                        durationInMilliseconds: 207000,
-                        source: '6112RGHQwT1lgG897P2eoq',
-                    },
-                    'You and me as one - Jack Savoretti, Sigma',
-                ),
-            );
-        });
+                globalStore.mediaProviders.set('YouTube', youtubeProvider);
+
+                // Let's add another video to the playlist
+                globalStore.player.addPlayableTrack(
+                    youtubeProvider.makePlayableTrack(
+                        {
+                            durationInMilliseconds: 160000,
+                            source: 'ZZfSm1u7YmM',
+                        },
+                        'The Joker | Chaos',
+                    ),
+                );
+            });
+        }
+
+        if (!globalStore.metadataAPIs.get('Spotify')) {
+            const spotifyMetadataAPI = new SpotifyMetadata(SPOTIFY_ACCESS_TOKEN);
+            globalStore.metadataAPIs.set('Spotify', spotifyMetadataAPI);
+        }
+
+        if (!globalStore.mediaProviders.get('Spotify')) {
+            // Let's add a Spotify track too
+            const spotifyProvider = new SpotifyProvider(SPOTIFY_ACCESS_TOKEN);
+            const spotifyMetadataAPI = globalStore.metadataAPIs.get('Spotify');
+
+            spotifyProvider.init().then(() => {
+                spotifyMetadataAPI?.getTrackInfo('6112RGHQwT1lgG897P2eoq').then((demoTrack) => {
+                    globalStore.player.addPlayableTrack(
+                        spotifyProvider.makePlayableTrack(
+                            demoTrack as SpotifyTrackInfo,
+                            (demoTrack as SpotifyTrackInfo).trackName,
+                        ),
+                    );
+                });
+            });
+            globalStore.mediaProviders.set('Spotify', spotifyProvider);
+        }
     });
 
     return (
@@ -70,7 +87,11 @@ export const DemoContainer: React.FC = observer((props) => {
                     <Playlist />
                 </Grid>
                 <Grid item xs={6}>
-                    <div id="demoPlayer"></div>
+                    <YouTubeContainer
+                        containerDivID="YouTubePlayerContainer"
+                        iframeDivID={YOUTUBE_IFRAME_DIV_ID}
+                    ></YouTubeContainer>
+                    <SpotifyContainer containerDivID="SpotifyPlayerContainer"></SpotifyContainer>
                     <PlayerBar></PlayerBar>
                 </Grid>
                 <Grid item xs={3}>

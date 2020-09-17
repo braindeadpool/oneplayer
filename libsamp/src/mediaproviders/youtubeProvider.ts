@@ -1,9 +1,7 @@
 import { IMediaProvider, PlayableTrack, ITrackInfo } from '../interfaces';
 import { MILLISECONDS_IN_SECOND } from '../constants';
 
-interface YouTubeTrackInfo extends ITrackInfo {
-    source: string;
-}
+interface YouTubeTrackInfo extends ITrackInfo {}
 
 enum YTPlayerState {
     UNSTARTED = -1,
@@ -19,7 +17,7 @@ export class YouTubeProvider implements IMediaProvider {
     private _attachPoint: HTMLElement;
     private _playerIsReady: boolean;
     /**
-     * Creates an instance of YoutubeProvider.
+     * Creates an instance of YouTubeProvider.
      * @param {(Element | string)} _attachPoint the DOM Element or id of the dom element where the youtube player object will render to.
      * @memberof VideoJSProvider
      */
@@ -41,7 +39,7 @@ export class YouTubeProvider implements IMediaProvider {
             }
         }
 
-        /* Dynamically load the Youtube IFrame API */
+        /* Dynamically load the YouTube IFrame API */
         /* https://developers.google.com/youtube/iframe_api_reference */
         let tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
