@@ -109,7 +109,6 @@ export class SpotifyProvider implements IMediaProvider {
     }
 
     setupTrack(track: SpotifyTrackInfo | null) {
-        console.log(track);
         //TODO: Implement loading the track via the Spotify Web API
         return this._webAPIAxiosInstance
             .put(`me/player/play?device_id=${this._deviceID}`, {

@@ -12,7 +12,7 @@ import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
 
 const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
 const SPOTIFY_ACCESS_TOKEN =
-    'BQBNlX85PT9WCSlq9DMIW0PW3nM6XzUQgowTXI5-UVJWU8dzGZEj2QJ8RD7HX-rkebqXJUb3g3tKYiXafnVmnCDQeB2xjXDvva4Bz_F5BnyptbwcgQH5A2rE3HhzJjDRwdmG8z9i71jMwvcodiXMdoGuu9WOjAasl8Ve-upL1ecrOdehYq9Ku8nFjDRtaVwOIasmE3Px_y9r';
+    'BQDlVvvUCqIHca2UlzFalqFjlQ5Jysjl8yklEcG5506PhKrLrQX4AdikLhlBxIYDO9DWTYRACf_kS3JZ2wYkCa2XVayYDB8_DCGnmUCGgmwunnxg6_2KIHYy903uPf8k72S5dHgcq_Usfsx-g_YWs_MYDaqSadZFU8hihGWlPIMttfwa-uyZ5GfU9ELpSp_7BPdYVxlCbgGH';
 
 export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();

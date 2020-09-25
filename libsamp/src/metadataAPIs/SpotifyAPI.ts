@@ -27,10 +27,10 @@ export class SpotifyMetadata implements IMetadata {
         return this._webAPIAxiosInstance.get(`tracks/${trackID}`).then((response) => {
             return {
                 source: trackID,
-                trackName: response['name'],
-                durationInMilliseconds: response['duration_ms'],
-                artistName: response['artists'][0]['name'],
-                imageURL: response['images'][0]['url'],
+                trackName: response.data.name,
+                durationInMilliseconds: response.data.duration_ms,
+                artistName: response.data.artists[0].name,
+                imageURL: response.data.album.images[0].url,
             };
         });
     }
