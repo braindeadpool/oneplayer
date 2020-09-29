@@ -16,12 +16,14 @@ export class YouTubeProvider implements IMediaProvider {
     private _player: any;
     private _attachPoint: HTMLElement;
     private _playerIsReady: boolean;
+    uniqueID: string;
     /**
      * Creates an instance of YouTubeProvider.
      * @param {(Element | string)} _attachPoint the DOM Element or id of the dom element where the youtube player object will render to.
      * @memberof VideoJSProvider
      */
-    constructor(_attachPointOrString: HTMLElement | string) {
+    constructor(uniqueID: string, _attachPointOrString: HTMLElement | string) {
+        this.uniqueID = uniqueID;
         this._player = null;
         this._playerIsReady = false;
         if (typeof document === 'undefined') {

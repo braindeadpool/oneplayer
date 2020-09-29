@@ -12,7 +12,7 @@ import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
 
 const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
 const SPOTIFY_ACCESS_TOKEN =
-    'BQDlVvvUCqIHca2UlzFalqFjlQ5Jysjl8yklEcG5506PhKrLrQX4AdikLhlBxIYDO9DWTYRACf_kS3JZ2wYkCa2XVayYDB8_DCGnmUCGgmwunnxg6_2KIHYy903uPf8k72S5dHgcq_Usfsx-g_YWs_MYDaqSadZFU8hihGWlPIMttfwa-uyZ5GfU9ELpSp_7BPdYVxlCbgGH';
+    'BQDoL7EzbItPYS9SuMsEsf8MSvHDgP_H7Q9-Z_pDcjvw9qQk5HMZVSqjHTG5wP1YvohMCg5oibywS6-TxzcUFlr0TzrZun263EKs88TRyA15-pi4ZC7jAzCb-tfwJDMYtULRLsQGl-X5espJpDP5nQrZkQme__ztMwwLbSXlwt7aA_6SmW0';
 
 export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
@@ -22,7 +22,7 @@ export const DemoContainer: React.FC = observer((props) => {
 
         // Check if the mediaProvider already exists
         if (!globalStore.mediaProviders.get('YouTube')) {
-            const youtubeProvider = new YouTubeProvider(YOUTUBE_IFRAME_DIV_ID);
+            const youtubeProvider = new YouTubeProvider('YouTube', YOUTUBE_IFRAME_DIV_ID);
             youtubeProvider.init().then(() => {
                 // Let's setup the initial demo track.
                 const demoTrack = youtubeProvider.makePlayableTrack(
@@ -57,7 +57,7 @@ export const DemoContainer: React.FC = observer((props) => {
 
         if (!globalStore.mediaProviders.get('Spotify')) {
             // Let's add a Spotify track too
-            const spotifyProvider = new SpotifyProvider(SPOTIFY_ACCESS_TOKEN);
+            const spotifyProvider = new SpotifyProvider('Spotify', SPOTIFY_ACCESS_TOKEN);
             const spotifyMetadataAPI = globalStore.metadataAPIs.get('Spotify');
 
             spotifyProvider.init().then(() => {

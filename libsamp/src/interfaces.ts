@@ -28,6 +28,13 @@ interface IIMediaProviderState {}
  */
 export interface IMediaProvider {
     /**
+     * Unique ID identifiying this media provider.
+     *
+     * @type {string}
+     * @memberof IMediaProvider
+     */
+    readonly uniqueID: string;
+    /**
      * init() is always called first before actuall using the provider. All the auth and other setup details should happen here.
      * It returns a promise boolean indicating whether the IMediaProvider was successfully initialized.
      *
@@ -100,8 +107,24 @@ export interface IMediaProvider {
     setupTrack(track: ITrackInfo | null): Promise<boolean>;
 }
 
-export interface IMetadata {
+/**
+ * IMetadataProvider is an interface implemented by a specific metadata provider.
+ * A metadata provider is similar to media provider in that it is not tightly coupled to anything.
+ * It just lets you fetch the metadata for a particular track or search for playable tracks with a query.
+ *
+ * @export
+ * @interface IMetadataProvider
+ */
+export interface IMetadataProvider {
     getTrackInfo(trackID: string): Promise<ITrackInfo>;
+    /**
+     * search the metadata provider with a query string for tracks. It returns a set of playable tracks that matches the query.
+     *
+     * @param {string} query
+     * @returns {Promise<PlayableTrack[]>}
+     * @memberof IMetadataProvider
+     */
+    search(query: string): Promise<PlayableTrack[]>;
 }
 
 /**

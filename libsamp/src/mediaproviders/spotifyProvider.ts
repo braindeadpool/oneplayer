@@ -1,7 +1,7 @@
 import { IMediaProvider, PlayableTrack } from '../interfaces';
 import axios, { AxiosInstance } from 'axios';
 
-import { SpotifyTrackInfo } from '../metadataAPIs/SpotifyAPI';
+import { SpotifyTrackInfo } from '../metadataproviders/spotifyMetadata';
 
 // TODO: Move to config file.
 // const SPOTIFY_CLIENT_ID = 'e93896fc729f4ec496b7f178c81e3fa4';
@@ -12,7 +12,9 @@ export class SpotifyProvider implements IMediaProvider {
     private _accessToken: string;
     private _deviceID: string;
     private _webAPIAxiosInstance: AxiosInstance;
-    constructor(accessToken: string) {
+    uniqueID: string;
+    constructor(uniqueID: string, accessToken: string) {
+        this.uniqueID = uniqueID;
         this._accessToken = accessToken;
         this._deviceID = '';
         this._webAPIAxiosInstance = axios.create({
