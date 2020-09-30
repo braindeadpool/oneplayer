@@ -4,13 +4,7 @@ import { SpotifyProvider } from '../mediaproviders/spotifyProvider';
 
 const SPOTIFY_API_BASE_URL = 'https://api.spotify.com/v1/';
 
-export interface SpotifyTrackInfo extends ITrackInfo {
-    source: string;
-    trackName: string;
-    durationInMilliseconds: number;
-    artistName: string;
-    imageURL: string;
-}
+export interface SpotifyTrackInfo extends ITrackInfo {}
 
 export class SpotifyMetadata implements IMetadataProvider {
     private _accessToken: string;

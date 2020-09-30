@@ -9,6 +9,9 @@ import { observable, action } from 'mobx';
 export interface ITrackInfo {
     source: string;
     durationInMilliseconds: number;
+    trackName: string;
+    artistName: string;
+    imageURL?: string;
 }
 
 /**
