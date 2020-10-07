@@ -50,8 +50,11 @@ export class SpotifyMetadata implements IMetadataProvider {
                         trackResults.push(this._getPlayableTrackFromSearchResult(track));
                     }
                 }
-
                 return trackResults;
+            })
+            .catch((response) => {
+                console.log('Spotify search failed with response', response);
+                return Array<PlayableTrack>();
             });
     }
 

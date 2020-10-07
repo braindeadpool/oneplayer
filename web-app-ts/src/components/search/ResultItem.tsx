@@ -19,14 +19,16 @@ export const ResultItem: React.FC<PlaylistItemProps> = (props) => {
         globalStore.player.currentPlaylist.addTrack(playableTrack);
     };
 
+    const trackInfo = props.playableTrack.trackInfo;
+
     if (props.isInPlaylist) {
         return (
             <>
                 <GridListTile key={props.index}>
-                    <img src={props.playableTrack.imageURL} alt={props.playableTrack.trackName} />
+                    <img src={trackInfo.imageURL} alt={trackInfo.trackName} />
                     <GridListTileBar
-                        title={props.playableTrack.trackName}
-                        subtitle={props.playableTrack.artistName}
+                        title={trackInfo.trackName}
+                        subtitle={trackInfo.artistName}
                         actionIcon={
                             <Icon>
                                 <CheckCircleSharpIcon></CheckCircleSharpIcon>
@@ -40,11 +42,11 @@ export const ResultItem: React.FC<PlaylistItemProps> = (props) => {
 
     return (
         <>
-            <GridListTile key={props.uniqueID}>
-                <img src={props.playableTrack.imageURL} alt={props.playableTrack.trackName} />
+            <GridListTile key={props.index}>
+                <img src={trackInfo.imageURL} alt={trackInfo.trackName} />
                 <GridListTileBar
-                    title={props.playableTrack.trackName}
-                    subtitle={props.playableTrack.artistName}
+                    title={trackInfo.trackName}
+                    subtitle={trackInfo.artistName}
                     actionIcon={
                         <IconButton
                             aria-label="add-track"

@@ -21,29 +21,24 @@ export const App: React.FC = () => {
                 <link rel="canonical" href="http://localhost:3000" />
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300"></link>
             </Helmet>
-            <TopBar>
-                <MenuItem component={Link} to="/">
-                    Home
-                </MenuItem>
-                <MenuItem component={Link} to="/demo">
-                    Demo
-                </MenuItem>
-                <SearchBar placeholder="To be implemented" />
-            </TopBar>
+            <GlobalStoreContextProvider>
+                <TopBar>
+                    <MenuItem component={Link} to="/">
+                        Home
+                    </MenuItem>
+                    <MenuItem component={Link} to="/demo">
+                        Demo
+                    </MenuItem>
 
-            <Switch>
-                <Route path="/demo">
-                    <GlobalStoreContextProvider>
+                    <SearchBar />
+                </TopBar>
+
+                <Switch>
+                    <Route path="/">
                         <DemoContainer />
-                    </GlobalStoreContextProvider>
-                </Route>
-
-                <Route path="/">
-                    <GlobalStoreContextProvider>
-                        <MainContainer />
-                    </GlobalStoreContextProvider>
-                </Route>
-            </Switch>
+                    </Route>
+                </Switch>
+            </GlobalStoreContextProvider>
         </HashRouter>
     );
 };

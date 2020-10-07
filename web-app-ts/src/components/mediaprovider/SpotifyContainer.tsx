@@ -16,11 +16,11 @@ export const SpotifyContainer: React.FC<SpotifyContainerProps> = observer((props
     const [imageURL, setImageURL] = useState('');
 
     useEffect(() => {
-        globalStore.metadataAPIs
+        globalStore.metadataProviders
             .get('Spotify')
             ?.getTrackInfo(globalStore.player.currentTrack?.trackInfo.source!)
-            .then((currentSpotifyTrackInfo) => {
-                setImageURL((currentSpotifyTrackInfo as SpotifyTrackInfo).imageURL);
+            .then((currentSpotifyTrackInfo: SpotifyTrackInfo) => {
+                setImageURL(currentSpotifyTrackInfo.imageURL!);
             });
     });
 

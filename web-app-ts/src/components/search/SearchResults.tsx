@@ -13,18 +13,18 @@ export const SearchResults: React.FC<SearchResultsProps> = (props) => {
 
     const isInPlaylist = (track: PlayableTrack) => {
         return globalStore.player.currentPlaylist.tracks.includes(track);
-    }
+    };
 
     return (
         <>
             <GridList>
-                {props.trackResults.map( (trackResult, index) => (
-                    <ResultItem index={index}
-                    playableTrack={trackResult}
-                    isInPlaylist={isInPlaylist(trackResult)}
+                {props.trackResults.map((trackResult, index) => (
+                    <ResultItem
+                        index={index}
+                        playableTrack={trackResult}
+                        isInPlaylist={isInPlaylist(trackResult)}
                     ></ResultItem>
-                )
-            }
+                ))}
             </GridList>
         </>
     );

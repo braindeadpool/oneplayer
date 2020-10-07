@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { PlayerBar } from './playerbar/PlayerBar';
 import { Playlist } from './playlist/Playlist';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +12,7 @@ import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
 
 const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
 const SPOTIFY_ACCESS_TOKEN =
-    'BQDoL7EzbItPYS9SuMsEsf8MSvHDgP_H7Q9-Z_pDcjvw9qQk5HMZVSqjHTG5wP1YvohMCg5oibywS6-TxzcUFlr0TzrZun263EKs88TRyA15-pi4ZC7jAzCb-tfwJDMYtULRLsQGl-X5espJpDP5nQrZkQme__ztMwwLbSXlwt7aA_6SmW0';
+    'BQDLodDFVXnS_Rhhych4k2PkhwJsxVms7YsaTPfiil0Yd_G0yOe5o_-TeXT4OaNr5ZO47kE8XSl1YImWzBP-fFyNj3S0QoVLdFKjhtctD_aRCZ0dWMoB8-qmf3-xez4JEDDNSH37_9RlACuIozoWUX-a8GYe14yh1ejk6--D0QOQRCF3F3s';
 
 export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
@@ -29,6 +29,8 @@ export const DemoContainer: React.FC = observer((props) => {
                     {
                         durationInMilliseconds: 1165000,
                         source: 'xuCn8ux2gbs',
+                        artistName: 'Bill Wurtz',
+                        trackName: 'history of the entire world, i guess',
                     },
                     'history of the entire world, i guess',
                 );
@@ -43,6 +45,8 @@ export const DemoContainer: React.FC = observer((props) => {
                         {
                             durationInMilliseconds: 160000,
                             source: 'ZZfSm1u7YmM',
+                            artistName: 'Ilia TS',
+                            trackName: 'The Joker | Chaos',
                         },
                         'The Joker | Chaos',
                     ),
@@ -50,29 +54,29 @@ export const DemoContainer: React.FC = observer((props) => {
             });
         }
 
-        if (!globalStore.metadataAPIs.get('Spotify')) {
-            const spotifyMetadataAPI = new SpotifyMetadata(SPOTIFY_ACCESS_TOKEN);
-            globalStore.metadataAPIs.set('Spotify', spotifyMetadataAPI);
-        }
-
         if (!globalStore.mediaProviders.get('Spotify')) {
             // Let's add a Spotify track too
             const spotifyProvider = new SpotifyProvider('Spotify', SPOTIFY_ACCESS_TOKEN);
-            const spotifyMetadataAPI = globalStore.metadataAPIs.get('Spotify');
+
+            if (!globalStore.metadataProviders.get('Spotify')) {
+                const spotifyMetadataAPI = new SpotifyMetadata(SPOTIFY_ACCESS_TOKEN, spotifyProvider);
+                globalStore.metadataProviders.set('Spotify', spotifyMetadataAPI);
+                globalStore.searcher.addMetadataProvider(spotifyMetadataAPI);
+            }
+            const spotifyMetadataAPI = globalStore.metadataProviders.get('Spotify');
 
             spotifyProvider.init().then(() => {
-                spotifyMetadataAPI?.getTrackInfo('6112RGHQwT1lgG897P2eoq').then((demoTrack) => {
+                spotifyMetadataAPI?.getTrackInfo('6112RGHQwT1lgG897P2eoq').then((demoTrack: SpotifyTrackInfo) => {
                     globalStore.player.addPlayableTrack(
-                        spotifyProvider.makePlayableTrack(
-                            demoTrack as SpotifyTrackInfo,
-                            (demoTrack as SpotifyTrackInfo).trackName,
-                        ),
+                        spotifyProvider.makePlayableTrack(demoTrack, demoTrack.trackName),
                     );
                 });
             });
             globalStore.mediaProviders.set('Spotify', spotifyProvider);
         }
     });
+
+    (window as any)['global_store'] = globalStore;
 
     return (
         <>
@@ -87,11 +91,13 @@ export const DemoContainer: React.FC = observer((props) => {
                     <Playlist />
                 </Grid>
                 <Grid item xs={6}>
-                    <YouTubeContainer
-                        containerDivID="YouTubePlayerContainer"
-                        iframeDivID={YOUTUBE_IFRAME_DIV_ID}
-                    ></YouTubeContainer>
-                    <SpotifyContainer containerDivID="SpotifyPlayerContainer"></SpotifyContainer>
+                    <div id="nowPlayingDiv">
+                        <YouTubeContainer
+                            containerDivID="YouTubePlayerContainer"
+                            iframeDivID={YOUTUBE_IFRAME_DIV_ID}
+                        ></YouTubeContainer>
+                        <SpotifyContainer containerDivID="SpotifyPlayerContainer"></SpotifyContainer>
+                    </div>
                     <PlayerBar></PlayerBar>
                 </Grid>
                 <Grid item xs={3}>

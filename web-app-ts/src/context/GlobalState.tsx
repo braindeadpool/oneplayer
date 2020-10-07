@@ -1,13 +1,14 @@
 import React, { createContext } from 'react';
 
-import { Player, IMediaProvider, IMetadata } from 'libsamp';
+import { Player, Searcher, IMediaProvider, IMetadataProvider } from 'libsamp';
 import { useLocalStore } from 'mobx-react-lite';
 
 const createStore = () => {
     return {
         player: new Player(),
         mediaProviders: new Map<string, IMediaProvider>(),
-        metadataAPIs: new Map<string, IMetadata>(),
+        metadataProviders: new Map<string, IMetadataProvider>(),
+        searcher: new Searcher(),
     };
 };
 type TStore = ReturnType<typeof createStore>;

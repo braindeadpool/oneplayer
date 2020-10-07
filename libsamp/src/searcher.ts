@@ -10,7 +10,9 @@ import { observable } from 'mobx';
 
 export class Searcher {
     @observable metadataProviders: IMetadataProvider[];
+
     constructor(metadataProviders?: IMetadataProvider[]) {
+        this.metadataProviders = Array<IMetadataProvider>();
         if (metadataProviders) this.metadataProviders = metadataProviders;
     }
 
@@ -24,6 +26,7 @@ export class Searcher {
         return Promise.all(Array.from(this.metadataProviders, (mp) => mp.search(query))).then((mpResults) => {
             const searchResults = new Array<PlayableTrack>();
             mpResults.forEach((playableTracks) => {
+                console.log(playableTracks);
                 searchResults.push(...playableTracks);
             });
             return searchResults;
