@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter, Switch, Route, Link } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Helmet } from 'react-helmet';
-import { MainContainer } from './components/MainContainer';
+import { AuthContainer } from './components/AuthContainer';
 import { DemoContainer } from './components/DemoContainer';
 import { TopBar } from './components/navbar/TopBar';
 import { SearchBar } from './components/navbar/SearchBar';
@@ -26,6 +26,9 @@ export const App: React.FC = () => {
                     <MenuItem component={Link} to="/">
                         Home
                     </MenuItem>
+                    <MenuItem component={Link} to="/authproviders">
+                        Authorize Providers
+                    </MenuItem>
                     <MenuItem component={Link} to="/demo">
                         Demo
                     </MenuItem>
@@ -34,8 +37,11 @@ export const App: React.FC = () => {
                 </TopBar>
 
                 <Switch>
-                    <Route path="/">
+                    <Route path="/demo">
                         <DemoContainer />
+                    </Route>
+                    <Route path="/authproviders">
+                        <AuthContainer />
                     </Route>
                 </Switch>
             </GlobalStoreContextProvider>

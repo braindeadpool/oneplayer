@@ -6,9 +6,17 @@ import ESearchBar from 'material-ui-search-bar';
 import { ResultsPopper } from '../search/ResultsPopper';
 import { PlayableTrack } from 'libsamp';
 import { ClickAwayListener } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        position: 'relative',
+    },
+}));
 
 export const SearchBar: React.FC = () => {
     const classes = useNavBarStyles();
+    const clickAwayClasses = useStyles();
     const globalStore = useGlobalStore();
 
     const [searchString, setSearchString] = useState('');
@@ -36,15 +44,18 @@ export const SearchBar: React.FC = () => {
             ></ESearchBar>
             <ClickAwayListener
                 onClickAway={() => {
+                    console.log('clicked away');
                     setShowSearchResults(false);
                 }}
             >
-                <ResultsPopper
-                    anchorElement={nowPlayingDivElement!}
-                    id="searchResults"
-                    searchResults={searchResults}
-                    visible={showSearchResults}
-                ></ResultsPopper>
+                <div className={clickAwayClasses.root}>
+                    <ResultsPopper
+                        anchorElement={nowPlayingDivElement!}
+                        id="searchResults"
+                        searchResults={searchResults}
+                        visible={showSearchResults}
+                    ></ResultsPopper>
+                </div>
             </ClickAwayListener>
         </div>
     );

@@ -12,7 +12,7 @@ import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
 
 const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
 const SPOTIFY_ACCESS_TOKEN =
-    'BQDLodDFVXnS_Rhhych4k2PkhwJsxVms7YsaTPfiil0Yd_G0yOe5o_-TeXT4OaNr5ZO47kE8XSl1YImWzBP-fFyNj3S0QoVLdFKjhtctD_aRCZ0dWMoB8-qmf3-xez4JEDDNSH37_9RlACuIozoWUX-a8GYe14yh1ejk6--D0QOQRCF3F3s';
+    'BQDt1jqx_MwgE3u0Y6exAo2t2PTMlUfRqviwa3vgF6eL7KGowntGxUgKm1708iglFm8b0A3JeAmvcPDY49O9QQcCGo6URQbIvHZOYw2cvAeh0WfnL2YTUiIT-zkFaaCp3lg1A9FKk29UdzDaInQTkLzZ6rBV79OYsOcHa5h4bnIo7ZxMbJvAC0s';
 
 export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
@@ -66,7 +66,7 @@ export const DemoContainer: React.FC = observer((props) => {
             const spotifyMetadataAPI = globalStore.metadataProviders.get('Spotify');
 
             spotifyProvider.init().then(() => {
-                spotifyMetadataAPI?.getTrackInfo('6112RGHQwT1lgG897P2eoq').then((demoTrack: SpotifyTrackInfo) => {
+                spotifyMetadataAPI?.getTrackInfo('1rk9eGO7AkPX1oafUuOnGs').then((demoTrack: SpotifyTrackInfo) => {
                     globalStore.player.addPlayableTrack(
                         spotifyProvider.makePlayableTrack(demoTrack, demoTrack.trackName),
                     );

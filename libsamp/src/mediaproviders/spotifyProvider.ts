@@ -9,6 +9,7 @@ import { SpotifyTrackInfo } from '../metadataproviders/spotifyMetadata';
 export class SpotifyProvider implements IMediaProvider {
     private _player: any;
     private _playerIsReady: boolean;
+    private _playerIsConnected: boolean;
     private _accessToken: string;
     private _deviceID: string;
     private _webAPIAxiosInstance: AxiosInstance;
@@ -40,39 +41,57 @@ export class SpotifyProvider implements IMediaProvider {
 
     onSpotifyWebPlaybackSDKReady() {
         // Check if already loaded
-        if (this._player != null && this._playerIsReady) {
+        if (this._player == null) {
+            this._player = new Spotify.Player({
+                name: 'libSAMP.Spotify.Player',
+                getOAuthToken: (cb) => {
+                    cb(this._accessToken);
+                },
+            });
+            console.log('Spotify Player created!');
+
+            // Ready
+            this._player.addListener('ready', ({ device_id }: { device_id: string }) => {
+                console.log('Ready with Device ID', device_id);
+                this._deviceID = device_id;
+                this._playerIsReady = true;
+                this._connectPlayer();
+            });
+
+            // Not Ready
+            this._player.addListener('not_ready', ({ device_id }: { device_id: string }) => {
+                console.log('Not Ready with Device ID', device_id);
+                this._playerIsReady = false;
+            });
+        }
+        this._connectPlayer();
+    }
+
+    _connectPlayer() {
+        // already connected, so no need to try to connect.
+        if (this._playerIsConnected) {
             return;
         }
-
-        this._player = new Spotify.Player({
-            name: 'libSAMP.Spotify.Player',
-            getOAuthToken: (cb) => {
-                cb(this._accessToken);
-            },
-        });
-
-        console.log('Spotify Player created!');
-
-        // Ready
-        this._player.addListener('ready', ({ device_id }: { device_id: string }) => {
-            console.log('Ready with Device ID', device_id);
-            this._deviceID = device_id;
-            this._playerIsReady = true;
-        });
-
-        // Not Ready
-        this._player.addListener('not_ready', ({ device_id }: { device_id: string }) => {
-            console.log('Not Ready with Device ID', device_id);
-            this._playerIsReady = false;
-        });
-
-        // we connect the player to web api.
-        this._player.connect().then((success: boolean) => {
-            if (success) {
-                console.log('The Web Playback SDK successfully connected to Spotify!');
-                this._playerIsReady = true;
-            }
-        });
+        // ready but not connected
+        if (this._playerIsReady) {
+            this._player.connect().then((success: boolean) => {
+                if (success) {
+                    console.log('The Web Playback SDK successfully connected to Spotify!');
+                    this._playerIsConnected = true;
+                }
+            });
+            return;
+        }
+        // not yet ready, so we wait 5 seconds for it to be ready
+        setTimeout(() => {
+            this._player.connect().then((success: boolean) => {
+                if (success) {
+                    console.log('The Web Playback SDK successfully connected to Spotify!');
+                    this._playerIsConnected = true;
+                }
+            });
+            return;
+        }, 5000);
     }
 
     init(): Promise<boolean> {
