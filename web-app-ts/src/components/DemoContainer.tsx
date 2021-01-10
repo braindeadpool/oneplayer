@@ -8,11 +8,13 @@ import { SpotifyContainer } from './mediaprovider/SpotifyContainer';
 import { YouTubeProvider, SpotifyProvider } from 'libsamp';
 import { observer } from 'mobx-react-lite';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
+import { SpotifyAuthProvider } from './authprovider/SpotifyAuthProvider';
 
 const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
-const SPOTIFY_ACCESS_TOKEN =
-    'BQDt1jqx_MwgE3u0Y6exAo2t2PTMlUfRqviwa3vgF6eL7KGowntGxUgKm1708iglFm8b0A3JeAmvcPDY49O9QQcCGo6URQbIvHZOYw2cvAeh0WfnL2YTUiIT-zkFaaCp3lg1A9FKk29UdzDaInQTkLzZ6rBV79OYsOcHa5h4bnIo7ZxMbJvAC0s';
 
 export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
@@ -55,11 +57,16 @@ export const DemoContainer: React.FC = observer((props) => {
         }
 
         if (!globalStore.mediaProviders.get('Spotify')) {
+            // Check if spotify is authorized
+            const spotifyToken = window.localStorage.getItem('spotifyAuthToken');
+            if (!spotifyToken) {
+                return;
+            }
             // Let's add a Spotify track too
-            const spotifyProvider = new SpotifyProvider('Spotify', SPOTIFY_ACCESS_TOKEN);
+            const spotifyProvider = new SpotifyProvider('Spotify', spotifyToken);
 
             if (!globalStore.metadataProviders.get('Spotify')) {
-                const spotifyMetadataAPI = new SpotifyMetadata(SPOTIFY_ACCESS_TOKEN, spotifyProvider);
+                const spotifyMetadataAPI = new SpotifyMetadata(spotifyToken, spotifyProvider);
                 globalStore.metadataProviders.set('Spotify', spotifyMetadataAPI);
                 globalStore.searcher.addMetadataProvider(spotifyMetadataAPI);
             }
@@ -101,7 +108,20 @@ export const DemoContainer: React.FC = observer((props) => {
                     <PlayerBar></PlayerBar>
                 </Grid>
                 <Grid item xs={3}>
-                    Menu to go here!
+                    <List
+                        component="nav"
+                        aria-labelledby="nested-list-subheader"
+                        subheader={
+                            <ListSubheader component="div" id="nested-list-subheader">
+                                Available media providers
+                            </ListSubheader>
+                        }
+                    >
+                        {/* Spotify auth */}
+                        <ListItem button>
+                            <SpotifyAuthProvider />
+                        </ListItem>
+                    </List>
                 </Grid>
             </Grid>
         </>

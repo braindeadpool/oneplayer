@@ -37,6 +37,14 @@ export interface IMediaProvider {
      * @memberof IMediaProvider
      */
     readonly uniqueID: string;
+
+    /**
+     * Status of the media provider; unless true it's not completed setup.
+     *
+     * @type {boolean}
+     * @memberof IMediaProvider
+     */
+    readonly isReady: boolean;
     /**
      * init() is always called first before actuall using the provider. All the auth and other setup details should happen here.
      * It returns a promise boolean indicating whether the IMediaProvider was successfully initialized.

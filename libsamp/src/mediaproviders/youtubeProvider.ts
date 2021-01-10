@@ -1,5 +1,6 @@
 import { IMediaProvider, PlayableTrack, ITrackInfo } from '../interfaces';
 import { MILLISECONDS_IN_SECOND } from '../constants';
+import { observable } from 'mobx';
 
 interface YouTubeTrackInfo extends ITrackInfo {}
 
@@ -15,7 +16,7 @@ enum YTPlayerState {
 export class YouTubeProvider implements IMediaProvider {
     private _player: any;
     private _attachPoint: HTMLElement;
-    private _playerIsReady: boolean;
+    @observable private _playerIsReady: boolean;
     uniqueID: string;
     /**
      * Creates an instance of YouTubeProvider.
@@ -49,6 +50,10 @@ export class YouTubeProvider implements IMediaProvider {
         firstScriptTag.parentNode!.insertBefore(tag, firstScriptTag);
 
         (<any>window).onYouTubeIframeAPIReady = this.onYouTubeIframeAPIReady.bind(this);
+    }
+
+    get isReady() {
+        return this._playerIsReady;
     }
 
     onYouTubeIframeAPIReady() {

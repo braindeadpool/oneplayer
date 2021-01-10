@@ -46,11 +46,12 @@ export const AuthContainer: React.FC = observer((props) => {
                         }
                         className={classes.root}
                     >
+                        {/* Spotify auth */}
                         <ListItem button>
-                            <ListItemIcon>
+                            {/* <ListItemIcon>
                                 <Avatar alt="Spotify icon" src="/public/Spotify_Icon_RGB_Green.png" />
                             </ListItemIcon>
-                            <ListItemText primary="Spotify" />
+                            <ListItemText primary="Spotify" /> */}
                         </ListItem>
                     </List>
                 </Grid>

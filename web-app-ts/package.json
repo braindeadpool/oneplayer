@@ -12,7 +12,9 @@
         "material-ui-search-bar": "^1.0.0",
         "mobx": "^5.15.4",
         "mobx-react-lite": "^2.2.1",
+        "react-oauth2-pkce": "^2.0.1",
         "react-router-dom": "^5.2.0",
+        "react-spotify-auth": "^1.1.4",
         "typescript": "^3.8.3",
         "webpack": "^4.42.1",
         "yt-player": "^3.4.3"

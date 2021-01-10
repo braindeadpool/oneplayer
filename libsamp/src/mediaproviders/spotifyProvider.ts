@@ -1,5 +1,6 @@
 import { IMediaProvider, PlayableTrack } from '../interfaces';
 import axios, { AxiosInstance } from 'axios';
+import { observable } from 'mobx';
 
 import { SpotifyTrackInfo } from '../metadataproviders/spotifyMetadata';
 
@@ -8,8 +9,8 @@ import { SpotifyTrackInfo } from '../metadataproviders/spotifyMetadata';
 
 export class SpotifyProvider implements IMediaProvider {
     private _player: any;
-    private _playerIsReady: boolean;
-    private _playerIsConnected: boolean;
+    @observable private _playerIsReady: boolean;
+    @observable private _playerIsConnected: boolean;
     private _accessToken: string;
     private _deviceID: string;
     private _webAPIAxiosInstance: AxiosInstance;
@@ -37,6 +38,10 @@ export class SpotifyProvider implements IMediaProvider {
         firstScriptTag.parentNode!.insertBefore(tag, firstScriptTag);
 
         (<any>window).onSpotifyWebPlaybackSDKReady = this.onSpotifyWebPlaybackSDKReady.bind(this);
+    }
+
+    get isReady() {
+        return this._playerIsReady && this._playerIsConnected;
     }
 
     onSpotifyWebPlaybackSDKReady() {

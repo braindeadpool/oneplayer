@@ -6,6 +6,17 @@ import { Box } from '@material-ui/core';
 import { useGlobalStore } from '../../context/GlobalState';
 import { observer } from 'mobx-react-lite';
 import { PlaylistItem } from './PlaylistItem';
+import config from '../../config';
+
+const getIconPathFromMediaProvider = (mediaProviderName?: string) => {
+    console.log('unique ID = ', mediaProviderName);
+    switch (mediaProviderName) {
+        case 'Spotify':
+            return config.spotify.iconPath;
+        case 'YouTube':
+            return config.youtube.iconPath;
+    }
+};
 
 export const Playlist: React.FC = observer(() => {
     const globalStore = useGlobalStore();
@@ -25,6 +36,9 @@ export const Playlist: React.FC = observer(() => {
                                         trackIndex={index}
                                         trackName={value.mediaID!}
                                         isPlaying={globalStore.player.currentTrackIndex == index}
+                                        iconPath={getIconPathFromMediaProvider(
+                                            globalStore.player.currentPlaylist.tracks[index].IMediaProvider.uniqueID,
+                                        )}
                                     />
                                 );
                             })}
