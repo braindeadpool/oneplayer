@@ -13,6 +13,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
 import { SpotifyAuthProvider } from './authprovider/SpotifyAuthProvider';
+import { YouTubeAuthProvider } from './authprovider/YouTubeAuthProvider';
 
 const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
 
@@ -117,7 +118,9 @@ export const DemoContainer: React.FC = observer((props) => {
                             </ListSubheader>
                         }
                     >
-                        {/* Spotify auth */}
+                        <ListItem button>
+                            <YouTubeAuthProvider />
+                        </ListItem>
                         <ListItem button>
                             <SpotifyAuthProvider />
                         </ListItem>
