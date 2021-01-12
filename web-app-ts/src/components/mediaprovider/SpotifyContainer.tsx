@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGlobalStore } from '../../context/GlobalState';
 import { observer } from 'mobx-react-lite';
 import { SpotifyTrackInfo } from 'libsamp';
+import Box from '@material-ui/core/Box';
 
 type SpotifyContainerProps = {
     containerDivID: string;
@@ -26,9 +27,11 @@ export const SpotifyContainer: React.FC<SpotifyContainerProps> = observer((props
 
     return (
         <>
-            <div id={props.containerDivID} hidden={isSpotifyDivHidden}>
-                <img src={imageURL} alt="album art" width="300px" height="auto" />
-            </div>
+            <Box display="flex" justifyContent="center" alignItems="center">
+                <div id={props.containerDivID} hidden={isSpotifyDivHidden}>
+                    <img src={imageURL} alt="album art" width="300px" height="auto" />
+                </div>
+            </Box>
         </>
     );
 });

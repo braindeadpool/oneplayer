@@ -5,3 +5,4 @@ export * from './searcher';
 export * from './mediaproviders/youtubeProvider';
 export * from './mediaproviders/spotifyProvider';
 export * from './metadataproviders/spotifyMetadata';
+export * from './metadataproviders/youtubeMetadata';

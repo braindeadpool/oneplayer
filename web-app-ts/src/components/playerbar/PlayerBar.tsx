@@ -9,14 +9,15 @@ import { observer } from 'mobx-react-lite';
 
 export const PlayerBar: React.FC = observer(() => {
     const globalStore = useGlobalStore();
-    const currentTrackName = globalStore.player.currentTrack?.mediaID;
+    const currentTrackName = globalStore.player.currentTrack?.trackInfo.trackName;
+    const currentTrackArtist = globalStore.player.currentTrack?.trackInfo.artistName;
     return (
         <>
             <Box p={'1%'}>
                 <Grid container justify="center">
                     <Grid container justify="center" spacing={4}>
                         <Grid item xs={12}>
-                            <NowPlaying currentTrackName={currentTrackName} />
+                            <NowPlaying currentTrackName={currentTrackName} currentTrackArtist={currentTrackArtist} />
                         </Grid>
                         <Grid item xs={12}>
                             <SliderBar />

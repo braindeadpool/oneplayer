@@ -11,9 +11,10 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { SpotifyMetadata, SpotifyTrackInfo } from 'libsamp';
+import { SpotifyMetadata, SpotifyTrackInfo, YouTubeMetadata } from 'libsamp';
 import { SpotifyAuthProvider } from './authprovider/SpotifyAuthProvider';
 import { YouTubeAuthProvider } from './authprovider/YouTubeAuthProvider';
+import config from '../config';
 
 const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
 
@@ -21,8 +22,7 @@ export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
 
     useEffect(() => {
-        // Initialize the demo video as the current playing track
-
+        const spotifyMetadataAPI = globalStore.metadataProviders.get('Spotify');
         // Check if the mediaProvider already exists
         if (!globalStore.mediaProviders.get('YouTube')) {
             const youtubeProvider = new YouTubeProvider('YouTube', YOUTUBE_IFRAME_DIV_ID);
@@ -54,6 +54,12 @@ export const DemoContainer: React.FC = observer((props) => {
                         'The Joker | Chaos',
                     ),
                 );
+
+                if (!globalStore.metadataProviders.get('YouTube')) {
+                    const youtubeMetadataAPI = new YouTubeMetadata(config.youtube.apiKey, youtubeProvider);
+                    globalStore.metadataProviders.set('YouTube', youtubeMetadataAPI);
+                    globalStore.searcher.addMetadataProvider(youtubeMetadataAPI);
+                }
             });
         }
 
@@ -98,7 +104,7 @@ export const DemoContainer: React.FC = observer((props) => {
                 <Grid item xs={3}>
                     <Playlist />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} alignItems="center" justify="center">
                     <div id="nowPlayingDiv">
                         <YouTubeContainer
                             containerDivID="YouTubePlayerContainer"

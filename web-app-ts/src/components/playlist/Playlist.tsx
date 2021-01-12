@@ -34,7 +34,7 @@ export const Playlist: React.FC = observer(() => {
                                     <PlaylistItem
                                         uniqueID={index.toString()}
                                         trackIndex={index}
-                                        trackName={value.mediaID!}
+                                        trackName={value.trackInfo.trackName}
                                         isPlaying={globalStore.player.currentTrackIndex == index}
                                         iconPath={getIconPathFromMediaProvider(
                                             globalStore.player.currentPlaylist.tracks[index].IMediaProvider.uniqueID,

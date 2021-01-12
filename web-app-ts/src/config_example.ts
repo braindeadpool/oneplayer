@@ -13,5 +13,6 @@ export default {
     },
     youtube: {
         iconPath: 'public/yt_icon_rgb.png',
+        apiKey: '<YOUTUBE_API_KEY>',
     },
 };
