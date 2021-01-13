@@ -11,13 +11,14 @@ import IconButton from '@material-ui/core/IconButton';
 import { Icon } from '@material-ui/core';
 import { PlayableTrack } from 'libsamp';
 
-type PlaylistItemProps = {
+type ResultItemProps = {
     index: number;
     isInPlaylist?: boolean;
     playableTrack: PlayableTrack;
+    mediaProviderIconPath?: string;
 };
 
-export const ResultItem: React.FC<PlaylistItemProps> = (props) => {
+export const ResultItem: React.FC<ResultItemProps> = (props) => {
     const globalStore = useGlobalStore();
 
     const addTrackToPlaylist = (playableTrack: PlayableTrack) => {
@@ -37,6 +38,9 @@ export const ResultItem: React.FC<PlaylistItemProps> = (props) => {
                     <Icon>
                         <CheckCircleSharpIcon></CheckCircleSharpIcon>
                     </Icon>
+                    <ListItemAvatar>
+                        <Avatar alt="Media provider icon" src={props.mediaProviderIconPath} />
+                    </ListItemAvatar>
                 </ListItem>
             </>
         );
@@ -57,6 +61,9 @@ export const ResultItem: React.FC<PlaylistItemProps> = (props) => {
                 >
                     <AddCircleSharpIcon></AddCircleSharpIcon>
                 </IconButton>
+                <ListItemAvatar>
+                    <Avatar alt="Media provider icon" src={props.mediaProviderIconPath} />
+                </ListItemAvatar>
             </ListItem>
             <Divider variant="inset" component="li" />
         </>

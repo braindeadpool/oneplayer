@@ -12,7 +12,12 @@ type ResultsPopperProps = {
 
 export const ResultsPopper: React.FC<ResultsPopperProps> = (props) => {
     return (
-        <Popper id={props.id} open={props.visible} anchorEl={props.anchorElement}>
+        <Popper
+            id={props.id}
+            open={props.visible}
+            anchorEl={props.anchorElement}
+            style={{ maxHeight: '80%', overflow: 'auto' }}
+        >
             <SearchResults trackResults={props.searchResults}></SearchResults>
         </Popper>
     );

@@ -1,3 +1,15 @@
+import config from './config';
+
+export const getIconPathFromMediaProvider = (mediaProviderName?: string) => {
+    console.log('unique ID = ', mediaProviderName);
+    switch (mediaProviderName) {
+        case 'Spotify':
+            return config.spotify.iconPath;
+        case 'YouTube':
+            return config.youtube.iconPath;
+    }
+};
+
 export function secondsToHHMMSS(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     seconds -= hours * 3600;

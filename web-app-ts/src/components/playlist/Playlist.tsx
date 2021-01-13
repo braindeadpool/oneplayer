@@ -6,17 +6,7 @@ import { Box } from '@material-ui/core';
 import { useGlobalStore } from '../../context/GlobalState';
 import { observer } from 'mobx-react-lite';
 import { PlaylistItem } from './PlaylistItem';
-import config from '../../config';
-
-const getIconPathFromMediaProvider = (mediaProviderName?: string) => {
-    console.log('unique ID = ', mediaProviderName);
-    switch (mediaProviderName) {
-        case 'Spotify':
-            return config.spotify.iconPath;
-        case 'YouTube':
-            return config.youtube.iconPath;
-    }
-};
+import { getIconPathFromMediaProvider } from '../../utils';
 
 export const Playlist: React.FC = observer(() => {
     const globalStore = useGlobalStore();
@@ -24,27 +14,23 @@ export const Playlist: React.FC = observer(() => {
 
     return (
         <>
-            <Box p={'1%'}>
-                <Grid container justify="center" spacing={2}>
-                    <Grid item xs={12} md={12}>
-                        <Typography variant="h3">Playlist</Typography>
-                        <List>
-                            {tracks.map((value, index) => {
-                                return (
-                                    <PlaylistItem
-                                        uniqueID={index.toString()}
-                                        trackIndex={index}
-                                        trackName={value.trackInfo.trackName}
-                                        isPlaying={globalStore.player.currentTrackIndex == index}
-                                        iconPath={getIconPathFromMediaProvider(
-                                            globalStore.player.currentPlaylist.tracks[index].IMediaProvider.uniqueID,
-                                        )}
-                                    />
-                                );
-                            })}
-                        </List>
-                    </Grid>
-                </Grid>
+            <Box p={'1%'} height="95%">
+                <Typography variant="h3">Playlist</Typography>
+                <List style={{ maxHeight: '80%', overflow: 'auto' }}>
+                    {tracks.map((value, index) => {
+                        return (
+                            <PlaylistItem
+                                uniqueID={index.toString()}
+                                trackIndex={index}
+                                trackName={value.trackInfo.trackName}
+                                isPlaying={globalStore.player.currentTrackIndex == index}
+                                iconPath={getIconPathFromMediaProvider(
+                                    globalStore.player.currentPlaylist.tracks[index].IMediaProvider.uniqueID,
+                                )}
+                            />
+                        );
+                    })}
+                </List>
             </Box>
         </>
     );
