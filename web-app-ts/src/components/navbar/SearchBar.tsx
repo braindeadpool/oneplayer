@@ -3,7 +3,8 @@ import { useGlobalStore } from '../../context/GlobalState';
 import SearchIcon from '@material-ui/icons/Search';
 import { useNavBarStyles } from './styles';
 import ESearchBar from 'material-ui-search-bar';
-import { ResultsPopper } from '../search/ResultsPopper';
+import { SearchResults } from './SearchResults';
+import Popper from '@material-ui/core/Popper';
 import { PlayableTrack } from 'libsamp';
 import { ClickAwayListener } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -42,21 +43,23 @@ export const SearchBar: React.FC = () => {
                 onChange={(newVal) => setSearchString(newVal)}
                 onRequestSearch={() => handleSearchRequest(searchString)}
             ></ESearchBar>
-            <ClickAwayListener
-                onClickAway={() => {
-                    console.log('clicked away');
-                    setShowSearchResults(false);
-                }}
+            <Popper
+                id="searchResults"
+                open={showSearchResults}
+                anchorEl={nowPlayingDivElement}
+                style={{ maxHeight: '80%', overflow: 'auto' }}
             >
-                <div className={clickAwayClasses.root}>
-                    <ResultsPopper
-                        anchorElement={nowPlayingDivElement!}
-                        id="searchResults"
-                        searchResults={searchResults}
-                        visible={showSearchResults}
-                    ></ResultsPopper>
-                </div>
-            </ClickAwayListener>
+                <ClickAwayListener
+                    onClickAway={() => {
+                        console.log('clicked away');
+                        setShowSearchResults(false);
+                    }}
+                >
+                    <div className={clickAwayClasses.root}>
+                        <SearchResults trackResults={searchResults}></SearchResults>
+                    </div>
+                </ClickAwayListener>
+            </Popper>
         </div>
     );
 };
