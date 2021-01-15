@@ -1,8 +1,6 @@
-import { IMediaProvider, PlayableTrack } from '../interfaces';
+import { IMediaProvider, PlayableTrack, ITrackInfo } from '../interfaces';
 import axios, { AxiosInstance } from 'axios';
 import { observable } from 'mobx';
-
-import { SpotifyTrackInfo } from '../metadataproviders/spotifyMetadata';
 
 // TODO: Move to config file.
 // const SPOTIFY_CLIENT_ID = 'e93896fc729f4ec496b7f178c81e3fa4';
@@ -14,9 +12,9 @@ export class SpotifyProvider implements IMediaProvider {
     private _accessToken: string;
     private _deviceID: string;
     private _webAPIAxiosInstance: AxiosInstance;
-    uniqueID: string;
-    constructor(uniqueID: string, accessToken: string) {
-        this.uniqueID = uniqueID;
+    name: string;
+    constructor(name: string, accessToken: string) {
+        this.name = name;
         this._accessToken = accessToken;
         this._deviceID = '';
         this._webAPIAxiosInstance = axios.create({
@@ -134,7 +132,7 @@ export class SpotifyProvider implements IMediaProvider {
         // TODO: Check if the state is indeed paused.
     }
 
-    setupTrack(track: SpotifyTrackInfo | null) {
+    setupTrack(track: ITrackInfo | null) {
         //TODO: Implement loading the track via the Spotify Web API
         return this._webAPIAxiosInstance
             .put(`me/player/play?device_id=${this._deviceID}`, {
@@ -173,7 +171,11 @@ export class SpotifyProvider implements IMediaProvider {
         });
     }
 
-    makePlayableTrack(trackInfo: SpotifyTrackInfo, mediaID: string) {
+    makePlayableTrack(trackInfo: ITrackInfo, mediaID: string): PlayableTrack {
         return new PlayableTrack(trackInfo, this, mediaID);
+    }
+
+    toJSON() {
+        return { name: this.name };
     }
 }

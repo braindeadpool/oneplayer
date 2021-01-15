@@ -31,12 +31,12 @@ interface IIMediaProviderState {}
  */
 export interface IMediaProvider {
     /**
-     * Unique ID identifiying this media provider.
+     * Uniqie name of this media provider.
      *
      * @type {string}
      * @memberof IMediaProvider
      */
-    readonly uniqueID: string;
+    readonly name: string;
 
     /**
      * Status of the media provider; unless true it's not completed setup.
@@ -116,6 +116,8 @@ export interface IMediaProvider {
     getCurrentTrackTimeInMilliseconds(): Promise<number>;
 
     setupTrack(track: ITrackInfo | null): Promise<boolean>;
+
+    makePlayableTrack(trackInfo: ITrackInfo, mediaID: string): PlayableTrack;
 }
 
 /**
@@ -170,6 +172,13 @@ export class Playlist {
     addTrack(track: PlayableTrack) {
         this._orderedTracks.push(track);
     }
+
+    toJSON() {
+        return {
+            tracks: this._orderedTracks,
+            shouldLoopOver: this.shouldLoopOver,
+        };
+    }
 }
 
 /**
@@ -186,11 +195,7 @@ export class PlayableTrack {
      * @param {(string | undefined)} [_mediaID=undefined]
      * @memberof PlayableTrack
      */
-    constructor(
-        private _trackInfo: ITrackInfo,
-        private _IMediaProvider: IMediaProvider,
-        private _mediaID: string | undefined = undefined,
-    ) {}
+    constructor(private _trackInfo: ITrackInfo, private _IMediaProvider: IMediaProvider, private _mediaID: string) {}
 
     get trackInfo(): ITrackInfo {
         return this._trackInfo;
@@ -202,5 +207,13 @@ export class PlayableTrack {
 
     get mediaID(): string | undefined {
         return this._mediaID;
+    }
+
+    toJSON() {
+        return {
+            trackInfo: this._trackInfo,
+            mediaProvider: this._IMediaProvider,
+            mediaID: this._mediaID,
+        };
     }
 }

@@ -25,7 +25,7 @@ export const Playlist: React.FC = observer(() => {
                                 trackName={value.trackInfo.trackName}
                                 isPlaying={globalStore.player.currentTrackIndex == index}
                                 iconPath={getIconPathFromMediaProvider(
-                                    globalStore.player.currentPlaylist.tracks[index].IMediaProvider.uniqueID,
+                                    globalStore.player.currentPlaylist.tracks[index].IMediaProvider.name,
                                 )}
                             />
                         );

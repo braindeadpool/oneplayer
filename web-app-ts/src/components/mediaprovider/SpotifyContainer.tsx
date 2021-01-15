@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useGlobalStore } from '../../context/GlobalState';
 import { observer } from 'mobx-react-lite';
-import { SpotifyTrackInfo } from 'libsamp';
+import { ITrackInfo } from 'libsamp';
 import Box from '@material-ui/core/Box';
 
 type SpotifyContainerProps = {
@@ -20,7 +20,7 @@ export const SpotifyContainer: React.FC<SpotifyContainerProps> = observer((props
         globalStore.metadataProviders
             .get('Spotify')
             ?.getTrackInfo(globalStore.player.currentTrack?.trackInfo.source!)
-            .then((currentSpotifyTrackInfo: SpotifyTrackInfo) => {
+            .then((currentSpotifyTrackInfo: ITrackInfo) => {
                 setImageURL(currentSpotifyTrackInfo.imageURL!);
             });
     });

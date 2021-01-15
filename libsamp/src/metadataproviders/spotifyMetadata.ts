@@ -4,8 +4,6 @@ import { SpotifyProvider } from '../mediaproviders/spotifyProvider';
 
 const SPOTIFY_API_BASE_URL = 'https://api.spotify.com/v1/';
 
-export interface SpotifyTrackInfo extends ITrackInfo {}
-
 export class SpotifyMetadata implements IMetadataProvider {
     private _accessToken: string;
     private _webAPIAxiosInstance: AxiosInstance;
@@ -20,7 +18,7 @@ export class SpotifyMetadata implements IMetadataProvider {
         this._webAPIAxiosInstance.defaults.headers.put['Content-Type'] = 'application/json';
     }
 
-    getTrackInfo(trackID: string): Promise<SpotifyTrackInfo> {
+    getTrackInfo(trackID: string): Promise<ITrackInfo> {
         return this._webAPIAxiosInstance.get(`tracks/${trackID}`).then((response) => {
             return {
                 source: trackID,

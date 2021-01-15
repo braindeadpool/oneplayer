@@ -11,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { SpotifyMetadata, SpotifyTrackInfo, YouTubeMetadata } from 'libsamp';
+import { SpotifyMetadata, YouTubeMetadata } from 'libsamp';
 import { SpotifyAuthProvider } from './authprovider/SpotifyAuthProvider';
 import { YouTubeAuthProvider } from './authprovider/YouTubeAuthProvider';
 import config from '../config';
@@ -22,45 +22,16 @@ export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
 
     useEffect(() => {
-        const spotifyMetadataAPI = globalStore.metadataProviders.get('Spotify');
         // Check if the mediaProvider already exists
         if (!globalStore.mediaProviders.get('YouTube')) {
             const youtubeProvider = new YouTubeProvider('YouTube', YOUTUBE_IFRAME_DIV_ID);
-            youtubeProvider.init().then(() => {
-                // Let's setup the initial demo track.
-                const demoTrack = youtubeProvider.makePlayableTrack(
-                    {
-                        durationInMilliseconds: 1165000,
-                        source: 'xuCn8ux2gbs',
-                        artistName: 'Bill Wurtz',
-                        trackName: 'history of the entire world, i guess',
-                    },
-                    'history of the entire world, i guess',
-                );
-                // // Let's dispatch to add the new track and start playback.
-                globalStore.player.addPlayableTrack(demoTrack);
-
-                globalStore.mediaProviders.set('YouTube', youtubeProvider);
-
-                // Let's add another video to the playlist
-                globalStore.player.addPlayableTrack(
-                    youtubeProvider.makePlayableTrack(
-                        {
-                            durationInMilliseconds: 160000,
-                            source: 'ZZfSm1u7YmM',
-                            artistName: 'Ilia TS',
-                            trackName: 'The Joker | Chaos',
-                        },
-                        'The Joker | Chaos',
-                    ),
-                );
-
-                if (!globalStore.metadataProviders.get('YouTube')) {
-                    const youtubeMetadataAPI = new YouTubeMetadata(config.youtube.apiKey, youtubeProvider);
-                    globalStore.metadataProviders.set('YouTube', youtubeMetadataAPI);
-                    globalStore.searcher.addMetadataProvider(youtubeMetadataAPI);
-                }
-            });
+            youtubeProvider.init();
+            globalStore.mediaProviders.set('YouTube', youtubeProvider);
+            if (!globalStore.metadataProviders.get('YouTube')) {
+                const youtubeMetadataAPI = new YouTubeMetadata(config.youtube.apiKey, youtubeProvider);
+                globalStore.metadataProviders.set('YouTube', youtubeMetadataAPI);
+                globalStore.searcher.addMetadataProvider(youtubeMetadataAPI);
+            }
         }
 
         if (!globalStore.mediaProviders.get('Spotify')) {
@@ -71,22 +42,28 @@ export const DemoContainer: React.FC = observer((props) => {
             }
             // Let's add a Spotify track too
             const spotifyProvider = new SpotifyProvider('Spotify', spotifyToken);
-
+            spotifyProvider.init();
             if (!globalStore.metadataProviders.get('Spotify')) {
                 const spotifyMetadataAPI = new SpotifyMetadata(spotifyToken, spotifyProvider);
                 globalStore.metadataProviders.set('Spotify', spotifyMetadataAPI);
                 globalStore.searcher.addMetadataProvider(spotifyMetadataAPI);
             }
-            const spotifyMetadataAPI = globalStore.metadataProviders.get('Spotify');
 
-            spotifyProvider.init().then(() => {
-                spotifyMetadataAPI?.getTrackInfo('1rk9eGO7AkPX1oafUuOnGs').then((demoTrack: SpotifyTrackInfo) => {
-                    globalStore.player.addPlayableTrack(
-                        spotifyProvider.makePlayableTrack(demoTrack, demoTrack.trackName),
-                    );
-                });
-            });
             globalStore.mediaProviders.set('Spotify', spotifyProvider);
+        }
+
+        // Check if playlist exists and load it
+        const currentPlaylist = localStorage.getItem('currentPlaylist');
+        if (currentPlaylist) {
+            const playlist = JSON.parse(currentPlaylist);
+            for (let track of playlist.tracks) {
+                const mediaProvider = globalStore.mediaProviders.get(track.mediaProvider.name);
+                if (mediaProvider) {
+                    globalStore.player.addPlayableTrack(
+                        mediaProvider.makePlayableTrack(track.trackInfo, track.mediaID),
+                    );
+                }
+            }
         }
     });
 

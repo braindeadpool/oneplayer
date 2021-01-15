@@ -2,8 +2,6 @@ import { IMediaProvider, PlayableTrack, ITrackInfo } from '../interfaces';
 import { MILLISECONDS_IN_SECOND } from '../constants';
 import { observable } from 'mobx';
 
-interface YouTubeTrackInfo extends ITrackInfo {}
-
 enum YTPlayerState {
     UNSTARTED = -1,
     ENDED,
@@ -17,14 +15,14 @@ export class YouTubeProvider implements IMediaProvider {
     private _player: any;
     private _attachPoint: HTMLElement;
     @observable private _playerIsReady: boolean;
-    uniqueID: string;
+    name: string;
     /**
      * Creates an instance of YouTubeProvider.
      * @param {(Element | string)} _attachPoint the DOM Element or id of the dom element where the youtube player object will render to.
      * @memberof VideoJSProvider
      */
-    constructor(uniqueID: string, _attachPointOrString: HTMLElement | string) {
-        this.uniqueID = uniqueID;
+    constructor(name: string, _attachPointOrString: HTMLElement | string) {
+        this.name = name;
         this._player = null;
         this._playerIsReady = false;
         if (typeof document === 'undefined') {
@@ -156,7 +154,7 @@ export class YouTubeProvider implements IMediaProvider {
         return Promise.resolve(this._player.getCurrentTime() * MILLISECONDS_IN_SECOND);
     }
 
-    makePlayableTrack(trackInfo: YouTubeTrackInfo, mediaID: string): PlayableTrack {
+    makePlayableTrack(trackInfo: ITrackInfo, mediaID: string): PlayableTrack {
         // TODO: Validate the mediaID and trackInfo.
         return new PlayableTrack(trackInfo, this, mediaID);
     }
@@ -167,5 +165,9 @@ export class YouTubeProvider implements IMediaProvider {
         // we don't want to autoplay it here as soon as it loads.
         this._player.pauseVideo();
         return Promise.resolve(true);
+    }
+
+    toJSON() {
+        return { name: this.name };
     }
 }

@@ -5,8 +5,6 @@ import { YouTubeProvider } from '../mediaproviders/youtubeProvider';
 
 const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3/';
 
-export interface YouTubeTrackInfo extends ITrackInfo {}
-
 export class YouTubeMetadata implements IMetadataProvider {
     private _apiKey: string;
     private _webAPIAxiosInstance: AxiosInstance;
@@ -21,7 +19,7 @@ export class YouTubeMetadata implements IMetadataProvider {
         this._webAPIAxiosInstance.defaults.headers.put['Content-Type'] = 'application/json';
     }
 
-    getTrackInfo(trackID: string): Promise<YouTubeTrackInfo> {
+    getTrackInfo(trackID: string): Promise<ITrackInfo> {
         return this._webAPIAxiosInstance
             .get('videos/', {
                 params: {
