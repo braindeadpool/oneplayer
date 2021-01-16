@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PlayerBar } from './playerbar/PlayerBar';
 import { Playlist } from './playlist/Playlist';
 import Typography from '@material-ui/core/Typography';
@@ -21,11 +21,32 @@ const YOUTUBE_IFRAME_DIV_ID = 'YouTubeIFrameDiv';
 export const DemoContainer: React.FC = observer((props) => {
     const globalStore = useGlobalStore();
 
+    const loadPlaylistFromLocalStorage = (): boolean => {
+        // Check if playlist exists and load it
+        const currentPlaylist = localStorage.getItem('currentPlaylist');
+        if (currentPlaylist) {
+            const playlist = JSON.parse(currentPlaylist);
+            globalStore.player.clearPlaylist();
+            for (let track of playlist.tracks) {
+                const mediaProvider = globalStore.mediaProviders.get(track.mediaProvider.name);
+                if (mediaProvider) {
+                    globalStore.player.addPlayableTrack(
+                        mediaProvider.makePlayableTrack(track.trackInfo, track.mediaID),
+                    );
+                }
+            }
+            return true;
+        }
+        return false;
+    };
+
     useEffect(() => {
         // Check if the mediaProvider already exists
         if (!globalStore.mediaProviders.get('YouTube')) {
             const youtubeProvider = new YouTubeProvider('YouTube', YOUTUBE_IFRAME_DIV_ID);
-            youtubeProvider.init();
+            youtubeProvider.init().then(() => {
+                return loadPlaylistFromLocalStorage();
+            });
             globalStore.mediaProviders.set('YouTube', youtubeProvider);
             if (!globalStore.metadataProviders.get('YouTube')) {
                 const youtubeMetadataAPI = new YouTubeMetadata(config.youtube.apiKey, youtubeProvider);
@@ -42,7 +63,9 @@ export const DemoContainer: React.FC = observer((props) => {
             }
             // Let's add a Spotify track too
             const spotifyProvider = new SpotifyProvider('Spotify', spotifyToken);
-            spotifyProvider.init();
+            spotifyProvider.init().then(() => {
+                return loadPlaylistFromLocalStorage();
+            });
             if (!globalStore.metadataProviders.get('Spotify')) {
                 const spotifyMetadataAPI = new SpotifyMetadata(spotifyToken, spotifyProvider);
                 globalStore.metadataProviders.set('Spotify', spotifyMetadataAPI);
@@ -50,20 +73,6 @@ export const DemoContainer: React.FC = observer((props) => {
             }
 
             globalStore.mediaProviders.set('Spotify', spotifyProvider);
-        }
-
-        // Check if playlist exists and load it
-        const currentPlaylist = localStorage.getItem('currentPlaylist');
-        if (currentPlaylist) {
-            const playlist = JSON.parse(currentPlaylist);
-            for (let track of playlist.tracks) {
-                const mediaProvider = globalStore.mediaProviders.get(track.mediaProvider.name);
-                if (mediaProvider) {
-                    globalStore.player.addPlayableTrack(
-                        mediaProvider.makePlayableTrack(track.trackInfo, track.mediaID),
-                    );
-                }
-            }
         }
     });
 

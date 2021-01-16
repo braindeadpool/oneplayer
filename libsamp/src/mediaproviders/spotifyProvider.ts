@@ -68,6 +68,7 @@ export class SpotifyProvider implements IMediaProvider {
             });
         }
         this._connectPlayer();
+        return this._playerIsConnected;
     }
 
     _connectPlayer() {
@@ -105,8 +106,7 @@ export class SpotifyProvider implements IMediaProvider {
         return new Promise((resolve) => {
             // Wait 5 seconds for SDK to load
             setTimeout(() => {
-                this.onSpotifyWebPlaybackSDKReady();
-                resolve(true);
+                resolve(this.onSpotifyWebPlaybackSDKReady());
             }, 5000);
         });
     }

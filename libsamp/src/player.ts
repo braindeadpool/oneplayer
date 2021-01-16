@@ -143,4 +143,17 @@ export class Player {
             this.setCurrentTrackIndex(0);
         }
     }
+
+    @action.bound
+    removeTrackAtIndex(index: number) {
+        this.currentPlaylist.removeTrack(index);
+        if (index <= this.currentTrackIndex) {
+            this.currentTrackIndex -= 1;
+        }
+    }
+
+    @action.bound
+    clearPlaylist() {
+        this.currentPlaylist.clear();
+    }
 }

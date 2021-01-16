@@ -173,6 +173,27 @@ export class Playlist {
         this._orderedTracks.push(track);
     }
 
+    /**
+     * Clear the current playlist.
+     *
+     * @memberof Playlist
+     */
+    @action.bound
+    clear() {
+        this._orderedTracks = [];
+    }
+
+    /**
+     * Remove the track at index {@param index} in playlist.
+     *
+     * @memberof Playlist
+     */
+    @action.bound
+    removeTrack(index: number) {
+        if (this.size <= index) return;
+        this._orderedTracks.splice(index, 1);
+    }
+
     toJSON() {
         return {
             tracks: this._orderedTracks,
