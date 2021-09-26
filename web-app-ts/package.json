@@ -52,7 +52,7 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "prod": "webpack",
-        "start": "webpack-dev-server  --mode development --inline --hot",
+        "start": "webpack-dev-server  --mode development --inline --hot --https",
         "build": "webpack  --mode development"
     },
     "author": "suraj@mssuraj.com",

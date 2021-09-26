@@ -1,6 +1,6 @@
 // Example config file, replace the secret values below for your app and rename this file to config.ts
 
-const BASE_URL = 'http://127.0.0.1:8080';
+const BASE_URL = 'https://127.0.0.1:8080';
 
 export default {
     baseURL: BASE_URL,
