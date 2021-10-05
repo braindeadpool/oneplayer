@@ -52,6 +52,7 @@ export class SpotifyProvider implements IMediaProvider {
                 },
             });
             console.log('Spotify Player created!');
+            (<any>window).onSpotifyWebPlaybackSDKReady = this.onSpotifyWebPlaybackSDKReady.bind(this);
 
             // Ready
             this._player.addListener('ready', ({ device_id }: { device_id: string }) => {
@@ -90,7 +91,7 @@ export class SpotifyProvider implements IMediaProvider {
         setTimeout(() => {
             this._player.connect().then((success: boolean) => {
                 if (success) {
-                    console.log('The Web Playback SDK successfully connected to Spotify!');
+                    console.log('The Web Playback SDK successfully connected to Spotify after retry!');
                     this._playerIsConnected = true;
                 }
             });
